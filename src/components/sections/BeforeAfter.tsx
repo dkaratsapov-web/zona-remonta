@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Photo } from "@/components/ui/Photo";
 import { SectionLabel } from "@/components/ui/SectionLabel";
+import { beforeAfter } from "@/data/content";
 
 /**
  * Сравнение «до/после». Управляется мышью, пальцем и клавиатурой:
@@ -62,12 +63,12 @@ export function BeforeAfter() {
         }}
       >
         <div className="before-after__side before-after__side--before">
-          <Photo variant="raw" />
+          <Photo variant="raw" src={beforeAfter.before.src} alt={beforeAfter.before.alt} />
           <span className="before-after__tag before-after__tag--left label">До</span>
         </div>
 
         <div className="before-after__side before-after__side--after" style={{ clipPath: `inset(0 0 0 ${value}%)` }}>
-          <Photo variant="warm" floor edges />
+          <Photo variant="warm" src={beforeAfter.after.src} alt={beforeAfter.after.alt} />
           <span className="before-after__tag before-after__tag--right label">После</span>
         </div>
 
