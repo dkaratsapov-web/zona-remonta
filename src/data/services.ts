@@ -62,6 +62,8 @@ export const services: Service[] = [
     titleLines: ["МАТЕРИАЛЫ"],
     description: "Подбор и закупка материалов под задачи объекта.",
     photo: "warm",
+    image: "/images/services/materials.webp",
+    imageAlt: "Строительные материалы на объекте: кирпич, листовые материалы, сухие смеси на поддонах",
   },
   {
     id: "other",
