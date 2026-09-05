@@ -675,7 +675,7 @@ button, input, textarea, select { font: inherit; color: inherit; }
 }
 .before-after__side { position: absolute; inset: 0; }
 .before-after__side .photo { position: absolute; inset: 0; }
-.before-after__tag { position: absolute; top: 32px; color: #fff; z-index: 3; }
+.before-after__tag { position: absolute; top: 32px; color: #fff; z-index: 4; }
 .before-after__tag--left { left: var(--pad); }
 .before-after__tag--right { right: var(--pad); }
 .before-after__divider { position: absolute; top: 0; bottom: 0; width: 2px; background: var(--accent); z-index: 4; }
@@ -702,6 +702,19 @@ button, input, textarea, select { font: inherit; color: inherit; }
   bottom: 0;
   height: 40%;
   background: linear-gradient(180deg, transparent, rgba(8, 8, 8, 0.95));
+  pointer-events: none;
+  z-index: 2;
+}
+/* Верхняя граница растворяется так же, как нижняя: иначе кадр
+   выглядит обрезанным по линии шапки. */
+.before-after__frame::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 22%;
+  background: linear-gradient(180deg, rgba(8, 8, 8, 0.92), transparent);
   pointer-events: none;
   z-index: 2;
 }
