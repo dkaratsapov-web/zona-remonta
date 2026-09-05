@@ -42,13 +42,16 @@ export function Hero() {
         ease: "none",
         scrollTrigger: { trigger: node, start: "top top", end: "bottom top", scrub: true },
       });
+      // Параллакс висит на маске, а входная анимация — на слове внутри неё.
+      // Иначе scrub-твин запомнил бы стартовым значением yPercent 110,
+      // выставленный входной анимацией, и слово навсегда осталось бы под маской.
       gsap.to("[data-hero-word='zona']", {
-        yPercent: -14,
+        yPercent: -8,
         ease: "none",
         scrollTrigger: { trigger: node, start: "top top", end: "bottom top", scrub: true },
       });
       gsap.to("[data-hero-word='remonta']", {
-        yPercent: 8,
+        yPercent: 5,
         ease: "none",
         scrollTrigger: { trigger: node, start: "top top", end: "bottom top", scrub: true },
       });
@@ -89,15 +92,11 @@ export function Hero() {
         </div>
 
         <h1 className="hero__title wordmark">
-          <span className="hero__mask">
-            <span data-hero-line data-hero-word="zona">
-              ЗОНА
-            </span>
+          <span className="hero__mask" data-hero-word="zona">
+            <span data-hero-line>ЗОНА</span>
           </span>
-          <span className="hero__mask">
-            <span data-hero-line data-hero-word="remonta">
-              РЕМОНТА
-            </span>
+          <span className="hero__mask" data-hero-word="remonta">
+            <span data-hero-line>РЕМОНТА</span>
           </span>
         </h1>
 

@@ -943,3 +943,14 @@ button, input, textarea, select { font: inherit; color: inherit; }
     z-index: 2;
   }
 }
+
+/* ── правки после проверки на живом экране ── */
+
+/* На телефоне 8vw давало всего 46px — заголовок терял вес.
+   ТЗ просит 46–68px с ручным контролем переноса. */
+@media (max-width: 767px) {
+  .hero__title { font-size: clamp(46px, 15vw, 68px); }
+}
+
+/* Метка demo упиралась в край экрана на широких мониторах */
+.hero .demo-tag { right: var(--pad); }
