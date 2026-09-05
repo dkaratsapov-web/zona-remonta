@@ -6,6 +6,7 @@ import { usePrefersReducedMotion } from "@/lib/hooks";
 import { processSteps } from "@/data/content";
 import { Photo } from "@/components/ui/Photo";
 import { SectionLabel } from "@/components/ui/SectionLabel";
+import { RollingNumber } from "@/components/ui/RollingNumber";
 
 const PHOTOS = ["warm", "cool", "night", "stone", "warm"] as const;
 
@@ -67,8 +68,8 @@ export function Process() {
       <div className="process__stage">
         <div className="container process__grid">
           <div className="process__current">
-            <p className="process__num" aria-hidden="true">
-              {step.number}
+            <p className="process__num">
+              <RollingNumber value={step.number} />
             </p>
             <h3 className="process__title">{step.title}</h3>
             <p className="lead" style={{ marginTop: 20, maxWidth: 420 }}>
