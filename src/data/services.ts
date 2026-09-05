@@ -72,5 +72,7 @@ export const services: Service[] = [
     titleLines: ["ДРУГИЕ", "РАБОТЫ"],
     description: "Не нашли нужной услуги? Расскажите задачу — найдём решение.",
     photo: "cool",
+    image: "/images/services/other.webp",
+    imageAlt: "Отделочные работы на объекте: монтаж конструкций у стены, подготовленное помещение",
   },
 ];
