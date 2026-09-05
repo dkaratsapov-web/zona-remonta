@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { leadSchema, submitLead, type LeadInput, type LeadPayload } from "@/lib/leadService";
@@ -147,7 +148,7 @@ export function LeadForm({
         <span>
           <label htmlFor={`${formId}-consent`}>
             Согласен на обработку персональных данных и принимаю{" "}
-            <a href="/privacy/">политику конфиденциальности</a>
+            <Link href="/privacy/">политику конфиденциальности</Link>
           </label>
           {errors.consent ? (
             <span className="field__error" role="alert">

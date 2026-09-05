@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { siteConfig, hasPhone } from "@/data/siteConfig";
 import { track } from "@/lib/analytics";
 import { Logo } from "./Logo";
@@ -68,10 +69,10 @@ export function Footer() {
           <p className="label site-footer__head">Документы</p>
           <ul className="site-footer__list">
             <li>
-              <a href="/privacy/">Политика конфиденциальности</a>
+              <Link href="/privacy/">Политика конфиденциальности</Link>
             </li>
             <li>
-              <a href="/consent/">Согласие на обработку данных</a>
+              <Link href="/consent/">Согласие на обработку данных</Link>
             </li>
           </ul>
         </div>
