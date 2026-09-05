@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8">
+<title>ЗОНА РЕМОНТА — лендинг</title>
+<link rel="stylesheet" href="font.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#080808;--bg2:#111111;--graphite:#181818;--line:rgba(255,255,255,.12);--line-soft:rgba(255,255,255,.06);
+ --text:#F5F5F5;--muted:#9A9A9A;--dim:#5E5E5E;--accent:#E5202A;--accent-text:#FF4D4D;--accent-deep:#B3161D}
+html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{background:var(--bg);color:var(--text);font-family:'Manrope',system-ui,sans-serif;-webkit-font-smoothing:antialiased;width:390px}
+section{position:relative;overflow:hidden}
+.wrap{padding:0 72px}
+.ph{position:relative;overflow:hidden;background:#0c0c0c;isolation:isolate}
+.ph i{position:absolute;display:block;pointer-events:none}
+.ph .base{inset:0;background:linear-gradient(160deg,#151515 0%,#212121 42%,#0d0d0d 100%);z-index:-2}
+.ph .glow{inset:0;background:radial-gradient(90% 70% at 72% 18%,rgba(255,236,214,.36),transparent 64%)}
+.ph .beam{inset:-20% -10% auto -10%;height:130%;background:linear-gradient(103deg,transparent 18%,rgba(255,238,214,.34) 33%,rgba(255,238,214,.11) 46%,transparent 58%);transform:skewX(-9deg)}
+.ph .floor{left:-10%;right:-10%;bottom:-6%;height:42%;background:linear-gradient(180deg,rgba(255,255,255,.16),rgba(255,255,255,.04) 55%,transparent);transform:perspective(600px) rotateX(58deg);transform-origin:bottom;opacity:.65}
+.ph .edge{inset:0;background:linear-gradient(90deg,rgba(255,255,255,.09) 0 1px,transparent 1px) 22% 0/1px 100% no-repeat,linear-gradient(90deg,rgba(255,255,255,.05) 0 1px,transparent 1px) 68% 0/1px 100% no-repeat,linear-gradient(180deg,rgba(255,255,255,.07) 0 1px,transparent 1px) 0 72%/100% 1px no-repeat}
+.ph .vig{inset:0;background:radial-gradient(120% 100% at 50% 40%,transparent 44%,rgba(0,0,0,.42) 100%)}
+.ph.warm .glow{background:radial-gradient(80% 70% at 30% 22%,rgba(255,224,186,.40),transparent 62%)}
+.ph.cool .glow{background:radial-gradient(85% 70% at 65% 25%,rgba(200,222,255,.28),transparent 64%)}
+.ph.cool .beam{background:linear-gradient(97deg,transparent 20%,rgba(214,232,255,.26) 34%,transparent 55%)}
+.ph.night .base{background:linear-gradient(200deg,#0f1216 0%,#1b2027 45%,#0a0c0e 100%)}
+.ph.night .glow{background:radial-gradient(60% 45% at 24% 62%,rgba(255,196,128,.46),transparent 62%)}
+.ph.stone .base{background:linear-gradient(140deg,#191919 0%,#272727 50%,#101010 100%)}
+.ph.stone .beam{background:linear-gradient(115deg,transparent 25%,rgba(255,255,255,.20) 40%,transparent 62%)}
+.lbl{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.lbl .ac{color:var(--accent-text)}
+.mark{display:inline-block;width:9px;height:9px;background:var(--accent);vertical-align:middle}
+.btn{display:inline-flex;align-items:center;gap:12px;padding:17px 30px;background:var(--accent);color:#fff;font-weight:700;font-size:15px;border-radius:2px}
+.wm{font-weight:800;letter-spacing:-.03em;line-height:.86;text-transform:uppercase}
+.h2{font-size:56px;font-weight:800;letter-spacing:-.035em;line-height:1.04}
+.eyebrow{display:flex;align-items:center;gap:16px;margin-bottom:26px}
+.eyebrow span.l{width:56px;height:2px;background:var(--accent);display:block}
+</style></head><body>
+<!-- MOBILE HERO -->
+<section style="height:844px">
+  <div class="ph warm" style="position:absolute;inset:0"><i class="base"></i><i class="glow"></i><i class="beam"></i><i class="edge"></i><i class="floor"></i><i class="vig"></i></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,8,8,.75) 0%,rgba(8,8,8,.25) 34%,rgba(8,8,8,.94) 100%)"></div>
+  <div style="position:absolute;left:20px;right:20px;top:22px;display:flex;justify-content:space-between;align-items:center">
+    <div style="display:flex;align-items:center;gap:9px"><span class="mark" style="width:7px;height:7px"></span><span style="font-weight:800;font-size:13px;letter-spacing:.04em">ЗОНА РЕМОНТА</span></div>
+    <div style="display:flex;flex-direction:column;gap:5px"><span style="display:block;width:22px;height:2px;background:#fff"></span><span style="display:block;width:14px;height:2px;background:var(--accent)"></span></div>
+  </div>
+  <div style="position:absolute;left:20px;right:20px;bottom:118px">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px"><span style="display:block;width:28px;height:2px;background:var(--accent)"></span><span class="lbl" style="font-size:9px">РЕМОНТ · СТРОИТЕЛЬСТВО</span></div>
+    <div class="wm" style="font-size:62px">ЗОНА<br>РЕМОНТА</div>
+    <div style="margin-top:24px;font-size:18px;font-weight:300;color:#DEDEDE;line-height:1.4">Строим.<br>Ремонтируем.<br>Комплектуем.</div>
+  </div>
+  <div style="position:absolute;left:20px;right:20px;bottom:36px;height:56px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px">Рассчитать стоимость →</div>
+</section>
+
+<!-- MOBILE MANIFEST -->
+<section style="height:520px">
+  <div style="position:absolute;left:0;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--accent) 0%,var(--accent) 45%,rgba(255,255,255,.10) 45%)"></div>
+  <div style="position:absolute;left:20px;top:64px" class="lbl" style="font-size:10px"><span class="ac">02</span> / МАНИФЕСТ</div>
+  <div style="position:absolute;left:20px;right:20px;top:120px">
+    <div style="font-size:30px;font-weight:800;letter-spacing:-.02em;line-height:1.24">
+      Ремонт — это не набор отдельных работ. Это <span style="color:var(--accent-text)">один процесс</span><span style="color:#3A3A3A">, за который должен отвечать один подрядчик.</span></div>
+    <div style="margin-top:32px;width:44px;height:2px;background:var(--accent)"></div>
+    <div style="margin-top:24px;font-size:15px;color:var(--muted);line-height:1.8">Полный комплекс строительных, ремонтных и монтажных работ — от подготовки объекта до финальной отделки.</div>
+  </div>
+</section>
+
+<!-- MOBILE SERVICES -->
+<section style="height:700px">
+  <div style="position:absolute;left:20px;top:56px"><div class="lbl" style="font-size:10px;margin-bottom:14px"><span class="ac">03</span> / НАПРАВЛЕНИЯ</div>
+    <div style="font-size:34px;font-weight:800;letter-spacing:-.03em">Что мы делаем</div></div>
+  <div style="position:absolute;left:20px;right:20px;top:172px;display:flex;justify-content:space-between;align-items:center">
+    <span class="lbl" style="font-size:10px">01 — 06</span>
+    <span style="display:block;width:150px;height:2px;background:rgba(255,255,255,.12)"><span style="display:block;width:38px;height:2px;background:var(--accent)"></span></span></div>
+  <div style="position:absolute;left:20px;top:212px;width:300px;height:400px;overflow:hidden;border:1px solid var(--line)">
+    <div class="ph warm" style="position:absolute;inset:0"><i class="base"></i><i class="glow"></i><i class="beam"></i><i class="edge"></i><i class="vig"></i></div>
+    <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,8,8,.2),rgba(8,8,8,.9))"></div>
+    <span style="position:absolute;left:20px;top:18px;font-size:11px;font-weight:700;letter-spacing:.2em;color:var(--accent-text)">01</span>
+    <div style="position:absolute;left:20px;right:20px;bottom:22px"><div style="font-size:26px;font-weight:800;line-height:1.06">КВАРТИРЫ<br>ПОД КЛЮЧ</div>
+      <div style="margin-top:12px;font-size:12px;color:var(--muted);line-height:1.55">Обычный, дизайнерский и премиальный ремонт.</div></div>
+  </div>
+  <div style="position:absolute;left:340px;top:212px;width:300px;height:400px;overflow:hidden;border:1px solid var(--line)">
+    <div class="ph night" style="position:absolute;inset:0"><i class="base"></i><i class="glow"></i><i class="beam"></i><i class="vig"></i></div>
+    <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,8,8,.2),rgba(8,8,8,.9))"></div>
+    <span style="position:absolute;left:20px;top:18px;font-size:11px;font-weight:700;letter-spacing:.2em;color:var(--accent-text)">02</span></div>
+  <div style="position:absolute;left:20px;bottom:34px" class="lbl" style="font-size:10px;color:var(--dim)">SWIPE →</div>
+</section>
+
+<!-- MOBILE PROJECTS -->
+<section style="height:1180px">
+  <div style="position:absolute;left:20px;top:56px" class="lbl" style="font-size:10px"><span class="ac">04</span> / ПРОЕКТЫ</div>
+  <div style="position:absolute;left:0;right:0;top:100px;height:430px;overflow:hidden">
+    <div class="ph warm" style="position:absolute;inset:0"><i class="base"></i><i class="glow"></i><i class="beam"></i><i class="edge"></i><i class="floor"></i><i class="vig"></i></div></div>
+  <div style="position:absolute;left:20px;right:20px;top:552px">
+    <div class="lbl" style="font-size:10px;color:var(--accent-text);margin-bottom:12px">PROJECT 01</div>
+    <div style="font-size:30px;font-weight:800;letter-spacing:-.03em;line-height:1.06">Современная квартира</div>
+    <div style="margin-top:14px;display:flex;gap:26px;font-size:13px;color:var(--muted)"><span>Квартира</span><span>— м²</span></div>
+  </div>
+  <div style="position:absolute;left:0;right:0;top:700px;height:400px;overflow:hidden">
+    <div class="ph cool" style="position:absolute;inset:0"><i class="base"></i><i class="glow"></i><i class="beam"></i><i class="edge"></i><i class="floor"></i><i class="vig"></i></div>
+    <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,8,8,.5),rgba(8,8,8,.15))"></div>
+    <div style="position:absolute;left:20px;top:24px"><div class="lbl" style="font-size:10px;color:var(--accent-text)">PROJECT 02</div>
+      <div style="margin-top:8px;font-size:26px;font-weight:800">Загородный дом</div></div></div>
+</section>
+
+<!-- MOBILE BEFORE/AFTER -->
+<section style="height:620px">
+  <div style="position:absolute;left:0;top:0;right:0;height:440px;overflow:hidden">
+    <div style="position:absolute;left:0;top:0;bottom:0;width:44%;overflow:hidden">
+      <div style="position:absolute;inset:0;background:linear-gradient(150deg,#2a2724,#141312 60%,#1c1a18)"></div>
+      <div style="position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(0,0,0,.22) 0 2px,transparent 2px 30px);opacity:.5"></div>
+      <span class="lbl" style="position:absolute;left:16px;top:16px;font-size:10px;color:#fff">ДО</span></div>
+    <div style="position:absolute;right:0;top:0;bottom:0;width:56%;overflow:hidden">
+      <div class="ph warm" style="position:absolute;inset:0"><i class="base"></i><i class="glow"></i><i class="beam"></i><i class="floor"></i></div>
+      <span class="lbl" style="position:absolute;right:16px;top:16px;font-size:10px;color:#fff">ПОСЛЕ</span></div>
+    <div style="position:absolute;left:44%;top:0;bottom:0;width:2px;background:var(--accent)"></div>
+    <div style="position:absolute;left:calc(44% - 22px);top:calc(50% - 22px);width:44px;height:44px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px">‹ ›</div>
+  </div>
+  <div style="position:absolute;left:20px;right:20px;top:474px">
+    <div class="lbl" style="font-size:10px;margin-bottom:14px"><span class="ac">05</span> / ДО И ПОСЛЕ</div>
+    <div style="font-size:28px;font-weight:800;letter-spacing:-.025em">Один и тот же объект</div>
+    <div style="margin-top:12px;font-size:14px;color:var(--muted);line-height:1.6">Потяните разделитель пальцем.</div>
+  </div>
+</section>
+<!-- MOBILE CALCULATOR -->
+<section style="height:900px;background:var(--bg2)">
+  <div style="position:absolute;left:20px;top:56px"><div class="lbl" style="font-size:10px;margin-bottom:14px"><span class="ac">06</span> / КАЛЬКУЛЯТОР</div>
+    <div style="font-size:32px;font-weight:800;letter-spacing:-.03em;line-height:1.04">РАССЧИТАЙТЕ<br>ВАШ ПРОЕКТ</div>
+    <div style="margin-top:16px;font-size:14px;color:var(--muted);line-height:1.6">Три коротких вопроса — и вы увидите состав работ по вашему объекту.</div></div>
+  <div style="position:absolute;left:20px;right:20px;top:230px;display:flex;align-items:center;justify-content:space-between">
+    <span class="lbl" style="font-size:10px">ШАГ <span style="color:#fff">02</span> / 03</span>
+    <span style="display:block;width:140px;height:2px;background:rgba(255,255,255,.12)"><span style="display:block;width:93px;height:2px;background:var(--accent)"></span></span></div>
+  <div style="position:absolute;left:20px;right:20px;top:276px">
+    <div style="font-size:20px;font-weight:700;margin-bottom:20px">Что требуется?</div>
+    <div style="border:1px solid var(--line);background:var(--bg);padding:15px 18px;margin-bottom:10px;font-size:15px">Косметический ремонт</div>
+    <div style="border:1px solid var(--accent);background:rgba(229,32,42,.08);padding:15px 18px;margin-bottom:10px;font-size:15px;font-weight:700;display:flex;justify-content:space-between;align-items:center">Капитальный <span style="width:10px;height:10px;background:var(--accent)"></span></div>
+    <div style="border:1px solid var(--line);background:var(--bg);padding:15px 18px;margin-bottom:10px;font-size:15px">Под ключ</div>
+    <div style="border:1px solid var(--line);background:var(--bg);padding:15px 18px;font-size:15px">Дизайнерский / премиальный</div>
+    <div style="margin-top:26px"><div class="lbl" style="font-size:10px;color:var(--dim);margin-bottom:12px">ПЛОЩАДЬ</div>
+      <div style="display:flex;align-items:baseline;gap:8px"><span style="font-size:34px;font-weight:800">82</span><span style="font-size:17px;color:var(--muted)">м²</span></div>
+      <div style="margin-top:16px;height:2px;background:rgba(255,255,255,.12);position:relative">
+        <span style="position:absolute;left:0;top:0;height:2px;width:44%;background:var(--accent)"></span>
+        <span style="position:absolute;left:44%;top:-7px;width:16px;height:16px;background:var(--accent);border-radius:50%"></span></div></div>
+  </div>
+  <div style="position:absolute;left:20px;right:20px;bottom:36px;height:54px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px">Далее →</div>
+</section>
+
+<!-- MOBILE CALC RESULT -->
+<section style="height:760px;background:var(--bg2);border-top:1px solid var(--line-soft)">
+  <div style="position:absolute;left:20px;right:20px;top:56px">
+    <div class="lbl" style="font-size:10px;margin-bottom:16px">ВАШ ПРОЕКТ</div>
+    <div style="border:1px solid var(--line);background:var(--bg)">
+      <div style="padding:16px 18px;border-bottom:1px solid var(--line-soft);display:flex;justify-content:space-between"><span style="font-size:13px;color:var(--muted)">Объект</span><span style="font-size:15px;font-weight:700">Квартира · 82 м²</span></div>
+      <div style="padding:16px 18px;display:flex;justify-content:space-between"><span style="font-size:13px;color:var(--muted)">Работы</span><span style="font-size:15px;font-weight:700">Капитальный</span></div></div>
+    <div class="lbl" style="font-size:10px;margin:26px 0 14px">СОСТАВ РАБОТ</div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px">
+      <span style="border:1px solid var(--line);padding:8px 13px;font-size:13px">Демонтаж</span>
+      <span style="border:1px solid var(--line);padding:8px 13px;font-size:13px">Черновые</span>
+      <span style="border:1px solid var(--line);padding:8px 13px;font-size:13px">Электрика</span>
+      <span style="border:1px solid var(--line);padding:8px 13px;font-size:13px">Сантехника</span>
+      <span style="border:1px solid var(--line);padding:8px 13px;font-size:13px">Отделка</span>
+      <span style="border:1px solid var(--line);padding:8px 13px;font-size:13px">Комплектация</span></div>
+    <div style="margin-top:26px;border:1px solid rgba(229,32,42,.4);background:rgba(229,32,42,.06);padding:20px">
+      <div class="lbl" style="font-size:10px;color:var(--accent-text);margin-bottom:12px">ПРЕДВАРИТЕЛЬНАЯ ОЦЕНКА</div>
+      <div style="font-size:14px;color:#DEDEDE;line-height:1.65">Точную вилку рассчитаем после уточнения состояния объекта и выбранных материалов.</div></div>
+    <div style="margin-top:22px"><div class="lbl" style="font-size:10px;color:var(--dim);margin-bottom:10px">ТЕЛЕФОН</div>
+      <div style="height:52px;border:1px solid var(--accent);background:var(--bg);display:flex;align-items:center;padding:0 16px;font-size:15px">+7 (___) ___-__-__</div></div>
+    <div style="margin-top:18px;height:54px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px">Получить расчёт →</div>
+  </div>
+</section>
+
+<!-- MOBILE PROCESS -->
+<section style="height:720px">
+  <div style="position:absolute;left:20px;top:56px" class="lbl" style="font-size:10px"><span class="ac">07</span> / КАК МЫ РАБОТАЕМ</div>
+  <div style="position:absolute;left:20px;right:20px;top:110px">
+    <div style="display:flex;gap:18px;padding-bottom:26px;border-left:2px solid var(--accent);padding-left:20px;margin-left:-2px">
+      <div><div style="font-size:12px;font-weight:800;letter-spacing:.2em;color:var(--accent-text)">01</div>
+        <div style="margin-top:8px;font-size:22px;font-weight:800">ЗНАКОМСТВО</div>
+        <div style="margin-top:8px;font-size:14px;color:var(--muted)">Обсуждаем объект и задачу.</div></div></div>
+    <div style="display:flex;gap:18px;padding:0 0 26px;border-left:2px solid var(--accent);padding-left:20px;margin-left:-2px">
+      <div><div style="font-size:12px;font-weight:800;letter-spacing:.2em;color:var(--accent-text)">02</div>
+        <div style="margin-top:8px;font-size:22px;font-weight:800">РАСЧЁТ</div>
+        <div style="margin-top:8px;font-size:14px;color:var(--muted)">Предварительно оцениваем объём и стоимость.</div></div></div>
+    <div style="display:flex;gap:18px;padding:0 0 26px;border-left:2px solid rgba(255,255,255,.12);padding-left:20px;margin-left:-2px">
+      <div><div style="font-size:12px;font-weight:800;letter-spacing:.2em;color:var(--dim)">03</div>
+        <div style="margin-top:8px;font-size:22px;font-weight:800;color:#B8B8B8">ПЛАНИРОВАНИЕ</div>
+        <div style="margin-top:8px;font-size:14px;color:var(--muted)">Фиксируем работы, материалы и последовательность.</div></div></div>
+    <div style="display:flex;gap:18px;padding:0 0 26px;border-left:2px solid rgba(255,255,255,.12);padding-left:20px;margin-left:-2px">
+      <div><div style="font-size:12px;font-weight:800;letter-spacing:.2em;color:var(--dim)">04</div>
+        <div style="margin-top:8px;font-size:22px;font-weight:800;color:#8A8A8A">РЕАЛИЗАЦИЯ</div>
+        <div style="margin-top:8px;font-size:14px;color:var(--muted)">Организуем и выполняем работы.</div></div></div>
+    <div style="display:flex;gap:18px;border-left:2px solid rgba(255,255,255,.12);padding-left:20px;margin-left:-2px">
+      <div><div style="font-size:12px;font-weight:800;letter-spacing:.2em;color:var(--dim)">05</div>
+        <div style="margin-top:8px;font-size:22px;font-weight:800;color:#8A8A8A">РЕЗУЛЬТАТ</div>
+        <div style="margin-top:8px;font-size:14px;color:var(--muted)">Передаём готовый объект.</div></div></div>
+  </div>
+</section>
+
+<!-- MOBILE MATERIALS -->
+<section style="height:720px">
+  <div style="position:absolute;left:20px;top:56px" class="lbl" style="font-size:10px"><span class="ac">08</span> / МАТЕРИАЛЫ</div>
+  <div style="position:absolute;left:20px;right:20px;top:110px">
+    <div style="font-size:44px;font-weight:800;letter-spacing:-.035em;line-height:1.0">Не только<br>делаем.<br><span style="color:var(--accent-text)">Комплектуем.</span></div>
+    <div style="margin-top:24px;font-size:15px;color:var(--muted);line-height:1.75">Поможем подобрать и организовать закупку материалов под задачи и бюджет объекта.</div>
+  </div>
+  <div style="position:absolute;left:20px;top:400px;width:200px;height:270px;overflow:hidden;border:1px solid var(--line)">
+    <div class="ph stone" style="position:absolute;inset:0"><i class="base"></i><i class="beam"></i><i class="vig"></i></div></div>
+  <div style="position:absolute;right:20px;top:440px;width:140px;height:190px;overflow:hidden;border:1px solid var(--line)">
+    <div class="ph warm" style="position:absolute;inset:0"><i class="base"></i><i class="glow"></i><i class="beam"></i><i class="vig"></i></div></div>
+</section>
+
+<!-- MOBILE OTHER -->
+<section style="height:620px">
+  <div style="position:absolute;inset:0;background:radial-gradient(90% 50% at 50% 40%,rgba(229,32,42,.15),transparent 70%)"></div>
+  <div style="position:absolute;left:20px;top:56px" class="lbl" style="font-size:10px"><span class="ac">09</span> / НЕСТАНДАРТНЫЕ РАБОТЫ</div>
+  <div style="position:absolute;left:20px;right:20px;top:110px">
+    <div style="font-size:44px;font-weight:800;letter-spacing:-.04em;line-height:1.0">НЕТ НУЖНОЙ<br>РАБОТЫ<br><span style="color:var(--accent-text)">В СПИСКЕ?</span></div>
+    <div style="margin-top:22px;font-size:15px;color:var(--muted);line-height:1.7">Опишите задачу — скажем, чем можем помочь.</div>
+    <div style="margin-top:26px;height:96px;border:1px solid var(--line);background:#0C0C0C;padding:14px 16px;color:var(--dim);font-size:14px;line-height:1.55">Например: перегородки и замена окон, 60 м²</div>
+    <div style="margin-top:12px;height:52px;border:1px solid var(--line);background:#0C0C0C;display:flex;align-items:center;padding:0 16px;color:var(--dim);font-size:15px">+7 (___) ___-__-__</div>
+    <div style="margin-top:14px;height:54px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px">Рассказать о задаче →</div>
+  </div>
+</section>
+
+<!-- MOBILE FAQ -->
+<section style="height:620px">
+  <div style="position:absolute;left:20px;top:56px" class="lbl" style="font-size:10px"><span class="ac">10</span> / ВОПРОСЫ</div>
+  <div style="position:absolute;left:20px;right:20px;top:110px">
+    <div style="border-top:1px solid var(--line);padding:20px 0">
+      <div style="display:flex;justify-content:space-between;gap:16px"><span style="font-size:17px;font-weight:700;line-height:1.3">Делаете только комплексный ремонт?</span><span style="font-size:20px;color:var(--accent-text)">−</span></div>
+      <div style="margin-top:12px;font-size:14px;color:var(--muted);line-height:1.7">Нет. Можно обратиться как за ремонтом под ключ, так и за отдельными работами.</div></div>
+    <div style="border-top:1px solid var(--line);padding:20px 0;display:flex;justify-content:space-between;gap:16px"><span style="font-size:17px;font-weight:700;line-height:1.3;color:#DEDEDE">Можно заказать ремонт премиального уровня?</span><span style="font-size:20px;color:var(--dim)">+</span></div>
+    <div style="border-top:1px solid var(--line);padding:20px 0;display:flex;justify-content:space-between;gap:16px"><span style="font-size:17px;font-weight:700;line-height:1.3;color:#DEDEDE">Работаете с частными домами?</span><span style="font-size:20px;color:var(--dim)">+</span></div>
+    <div style="border-top:1px solid var(--line);padding:20px 0;display:flex;justify-content:space-between;gap:16px"><span style="font-size:17px;font-weight:700;line-height:1.3;color:#DEDEDE">Можно поручить вам закупку материалов?</span><span style="font-size:20px;color:var(--dim)">+</span></div>
+    <div style="border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:20px 0;display:flex;justify-content:space-between;gap:16px"><span style="font-size:17px;font-weight:700;line-height:1.3;color:#DEDEDE">У меня нестандартная задача. Можно обратиться?</span><span style="font-size:20px;color:var(--dim)">+</span></div>
+  </div>
+</section>
+
+<!-- MOBILE FINAL -->
+<section style="height:780px">
+  <div class="ph night" style="position:absolute;inset:0"><i class="base"></i><i class="glow"></i><i class="beam"></i><i class="edge"></i><i class="floor"></i><i class="vig"></i></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,8,8,.78),rgba(8,8,8,.93))"></div>
+  <div style="position:absolute;left:20px;right:20px;top:70px">
+    <div class="lbl" style="font-size:10px;margin-bottom:20px"><span class="ac">11</span> / ОБСУДИМ ОБЪЕКТ</div>
+    <div style="font-size:44px;font-weight:800;letter-spacing:-.04em;line-height:1.02">ЕСТЬ ОБЪЕКТ?<br>ДАВАЙТЕ<br>ОБСУДИМ.</div>
+    <div style="margin-top:20px;font-size:15px;color:var(--muted);line-height:1.7">Опишите задачу — подскажем формат работ и подготовим предварительный расчёт.</div>
+    <div style="margin-top:28px;height:52px;border:1px solid var(--line);background:rgba(12,12,12,.9);display:flex;align-items:center;padding:0 16px;color:var(--dim);font-size:15px">Как к вам обращаться</div>
+    <div style="margin-top:12px;height:52px;border:1px solid var(--line);background:rgba(12,12,12,.9);display:flex;align-items:center;padding:0 16px;color:var(--dim);font-size:15px">+7 (___) ___-__-__</div>
+    <div style="margin-top:12px;height:88px;border:1px solid var(--line);background:rgba(12,12,12,.9);padding:14px 16px;color:var(--dim);font-size:15px">Коротко об объекте</div>
+    <div style="margin-top:16px;display:flex;gap:12px;align-items:flex-start"><span style="width:18px;height:18px;border:1px solid var(--line);flex:none;margin-top:2px"></span>
+      <span style="font-size:12px;color:var(--muted);line-height:1.6">Согласен на обработку персональных данных</span></div>
+    <div style="margin-top:20px;height:54px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px">Обсудить проект →</div>
+  </div>
+</section>
+
+<!-- MOBILE FOOTER -->
+<section style="height:520px;border-top:1px solid var(--line)">
+  <div style="position:absolute;left:20px;top:44px;display:flex;align-items:center;gap:10px"><span class="mark" style="width:8px;height:8px"></span><span style="font-weight:800;font-size:15px;letter-spacing:.04em">ЗОНА РЕМОНТА</span></div>
+  <div style="position:absolute;left:20px;right:20px;top:92px;font-size:14px;color:var(--muted);line-height:1.75">Ремонт, строительство и комплексная реализация объектов под ключ.</div>
+  <div style="position:absolute;left:20px;top:180px;font-size:22px;font-weight:700">+7 (___) ___-__-__</div>
+  <div style="position:absolute;left:20px;top:224px;display:flex;gap:10px">
+    <span style="border:1px solid var(--line);padding:10px 18px;font-size:13px">Telegram</span>
+    <span style="border:1px solid var(--line);padding:10px 18px;font-size:13px">WhatsApp</span></div>
+  <div style="position:absolute;left:20px;right:20px;top:300px;height:1px;background:var(--line)"></div>
+  <div style="position:absolute;left:20px;top:324px;font-size:13px;color:var(--muted);line-height:2">Политика конфиденциальности<br>Согласие на обработку данных</div>
+  <div style="position:absolute;left:20px;top:420px;font-size:12px;color:var(--dim)">© 2026 Зона Ремонта</div>
+  <div style="position:absolute;left:0;right:0;bottom:-12px;overflow:hidden"><div class="wm" style="font-size:72px;color:rgba(255,255,255,.05);white-space:nowrap;margin-left:-8px">ЗОНА РЕМОНТА</div></div>
+</section>
+</body></html>

@@ -42,3 +42,5 @@ next-env.d.ts
 
 # design source artifacts
 design/font.css
+design/landing-desktop.png
+design/landing-mobile.png
