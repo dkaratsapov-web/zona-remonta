@@ -122,11 +122,6 @@ export function Services() {
         </ul>
       </div>
 
-      <div className="container">
-        <p className="services__hint">
-          Не нашли нужную работу в списке? Расскажите задачу — скорее всего, мы можем её выполнить.
-        </p>
-      </div>
     </section>
   );
 }

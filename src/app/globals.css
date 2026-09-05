@@ -602,7 +602,6 @@ button, input, textarea, select { font: inherit; color: inherit; }
 .service-card__foot i { display: block; width: 40px; height: 2px; background: var(--accent); transition: width 0.4s ease; }
 .service-card:hover .service-card__foot i { width: 74px; }
 
-.services__hint { margin-top: 40px; font-size: 15px; color: var(--muted); max-width: 640px; }
 
 @media (max-width: 1023px) {
   .services__viewport { overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; }

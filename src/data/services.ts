@@ -52,6 +52,8 @@ export const services: Service[] = [
     titleLines: ["ОКНА"],
     description: "Монтаж, замена и ремонт оконных конструкций.",
     photo: "stone",
+    image: "/images/services/windows.webp",
+    imageAlt: "Монтаж панорамного окна на объекте: специалист устанавливает створку, вид на город на закате",
   },
   {
     id: "materials",
