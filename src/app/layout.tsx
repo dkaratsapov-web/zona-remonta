@@ -26,7 +26,13 @@ export const metadata: Metadata = {
     siteName: siteConfig.name,
   },
   robots: { index: true, follow: true },
-  icons: { icon: `${basePath}/favicon.svg` },
+  icons: {
+    icon: [
+      { url: `${basePath}/favicon.svg`, type: "image/svg+xml" },
+      { url: `${basePath}/icon-32.png`, sizes: "32x32", type: "image/png" },
+    ],
+    apple: `${basePath}/apple-touch-icon.png`,
+  },
 };
 
 export const viewport: Viewport = {

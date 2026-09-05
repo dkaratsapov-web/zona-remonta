@@ -5,6 +5,7 @@ import { initGsap } from "@/lib/animations";
 import { useFinePointer, usePrefersReducedMotion } from "@/lib/hooks";
 import { track } from "@/lib/analytics";
 import { siteConfig } from "@/data/siteConfig";
+import { heroFacts } from "@/data/content";
 import { Photo } from "@/components/ui/Photo";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 import { useUi } from "@/components/ui/UiContext";
@@ -128,14 +129,19 @@ export function Hero() {
         <span className="hero__track-tick" />
       </div>
 
-      <div className="container hero__bottom" aria-hidden="true">
-        <span className="label hero__hint">
-          <i />
-          Листайте вниз
-        </span>
-        <span className="label" style={{ color: "var(--dim)" }}>
-          ZONE / 01
-        </span>
+      <div className="hero__facts">
+        <div className="container hero__facts-inner">
+          {heroFacts.map((fact) => (
+            <div className="fact" key={fact.title}>
+              <p className="fact__value">
+                {fact.value}
+                {fact.unit ? <span className="fact__unit">{fact.unit}</span> : null}
+              </p>
+              <p className="fact__title">{fact.title}</p>
+              <p className="fact__text">{fact.text}</p>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );

@@ -1,329 +1,381 @@
 /**
- * Конфигурация и прайс калькулятора.
+ * Конфигурация конфигуратора стоимости.
  *
- * Ни одна цифра не живёт внутри компонентов: ставки, коэффициенты
- * и надбавки правятся только здесь.
+ * В компонентах нет ни одной цены: всё, что влияет на расчёт, живёт здесь.
  *
- * ⚠️ СТАВКИ ДЕМОНСТРАЦИОННЫЕ. Прайса от заказчика нет, значения ниже —
- * ориентир по рынку, чтобы калькулятор считал и его можно было показать.
- * Перед публикацией заказчик обязан заменить их своими. Результат
- * намеренно показывается диапазоном и сопровождается оговоркой:
- * это предварительная оценка, а не коммерческое предложение.
+ * pricingStatus: "demo" — прайса заказчика ещё нет, значения ориентировочные
+ * и в интерфейсе помечены. Переключение на "production" убирает пометку.
  */
 
-export const pricingEnabled = true;
-
-/** Разброс итогового диапазона: ±15% от расчётной суммы. */
-export const RANGE_SPREAD = 0.15;
+export type PricingStatus = "demo" | "production";
+export const pricingStatus: PricingStatus = "demo";
 
 export type ObjectTypeId = "apartment" | "house" | "works" | "windows" | "other";
 
-/** Единица измерения объёма — у окон это конструкции, а не метры. */
-export type Unit = "sqm" | "piece" | "none";
+/**
+ * Как считается услуга:
+ *  per_m2      — ставка × площадь
+ *  per_unit    — ставка × количество единиц (окна)
+ *  fixed       — фиксированная сумма за объект, площадь не влияет
+ *  percentage  — процент от стоимости остальных выбранных работ
+ */
+export type PricingMode = "per_m2" | "per_unit" | "fixed" | "percentage";
 
-export type ScopeOption = {
+export type CategoryId = "preparation" | "engineering" | "finishing" | "completion";
+
+export type Category = { id: CategoryId; number: string; title: string };
+
+export const categories: Category[] = [
+  { id: "preparation", number: "01", title: "Подготовка" },
+  { id: "engineering", number: "02", title: "Инженерия" },
+  { id: "finishing", number: "03", title: "Отделка" },
+  { id: "completion", number: "04", title: "Комплектация" },
+];
+
+export type Service = {
   id: string;
-  label: string;
+  category: CategoryId;
+  title: string;
+  /** Короткое пояснение в строке — что именно входит. */
   hint?: string;
-  /** Ставка за единицу объёма, ₽. null — считать нельзя, нужен разговор. */
-  rate: number | null;
-  /**
-   * Состав работ, который увидит пользователь.
-   * ФАКТИЧЕСКОЕ УТВЕРЖДЕНИЕ О КОМПАНИИ — подтверждается заказчиком.
-   */
-  works: string[];
+  priceType: PricingMode;
+  price: number;
+  availableFor: ObjectTypeId[];
+  /** Кадр для превью при наведении. */
+  preview?: string;
+  /** Услуги, которые часто берут вместе с этой. */
+  suggests?: string[];
 };
+
+export const services: Service[] = [
+  // ── Подготовка ──────────────────────────────────────────────
+  {
+    id: "demolition",
+    category: "preparation",
+    title: "Демонтаж",
+    hint: "Снос перегородок, снятие покрытий",
+    priceType: "per_m2",
+    price: 950,
+    availableFor: ["apartment", "house", "works"],
+    preview: "/images/services/construction.webp",
+  },
+  {
+    id: "waste",
+    category: "preparation",
+    title: "Вывоз мусора",
+    hint: "Погрузка и вывоз",
+    priceType: "per_m2",
+    price: 380,
+    availableFor: ["apartment", "house", "works"],
+    preview: "/images/services/construction.webp",
+  },
+  {
+    id: "base",
+    category: "preparation",
+    title: "Подготовка основания",
+    hint: "Стяжка, выравнивание пола",
+    priceType: "per_m2",
+    price: 1450,
+    availableFor: ["apartment", "house", "works"],
+    preview: "/images/services/construction.webp",
+  },
+  {
+    id: "partitions",
+    category: "preparation",
+    title: "Возведение перегородок",
+    hint: "Новая планировка",
+    priceType: "per_m2",
+    price: 1200,
+    availableFor: ["apartment", "house", "works"],
+    preview: "/images/services/construction.webp",
+  },
+
+  // ── Инженерия ───────────────────────────────────────────────
+  {
+    id: "electrical",
+    category: "engineering",
+    title: "Электромонтажные работы",
+    hint: "Разводка, щит, точки",
+    priceType: "per_m2",
+    price: 1500,
+    availableFor: ["apartment", "house", "works"],
+    preview: "/images/services/construction.webp",
+  },
+  {
+    id: "plumbing",
+    category: "engineering",
+    title: "Сантехнические работы",
+    hint: "Разводка и приборы",
+    priceType: "per_m2",
+    price: 1250,
+    availableFor: ["apartment", "house", "works"],
+    preview: "/images/services/construction.webp",
+    suggests: ["waterproofing"],
+  },
+  {
+    id: "heating",
+    category: "engineering",
+    title: "Отопление",
+    hint: "Контуры и радиаторы",
+    priceType: "per_m2",
+    price: 1350,
+    availableFor: ["house", "works"],
+    preview: "/images/services/construction.webp",
+  },
+  {
+    id: "ventilation",
+    category: "engineering",
+    title: "Вентиляция и кондиционирование",
+    priceType: "per_m2",
+    price: 1100,
+    availableFor: ["apartment", "house"],
+    preview: "/images/services/construction.webp",
+  },
+
+  // ── Отделка ─────────────────────────────────────────────────
+  {
+    id: "walls",
+    category: "finishing",
+    title: "Отделка стен",
+    hint: "Выравнивание и финиш",
+    priceType: "per_m2",
+    price: 1850,
+    availableFor: ["apartment", "house", "works"],
+    preview: "/images/services/apartment.webp",
+  },
+  {
+    id: "ceiling",
+    category: "finishing",
+    title: "Потолки",
+    hint: "Выравнивание, короба, подсветка",
+    priceType: "per_m2",
+    price: 1200,
+    availableFor: ["apartment", "house", "works"],
+    preview: "/images/services/apartment.webp",
+  },
+  {
+    id: "floors",
+    category: "finishing",
+    title: "Напольные покрытия",
+    hint: "Укладка и плинтус",
+    priceType: "per_m2",
+    price: 1400,
+    availableFor: ["apartment", "house", "works"],
+    preview: "/images/services/apartment.webp",
+  },
+  {
+    id: "tiles",
+    category: "finishing",
+    title: "Плитка",
+    hint: "Санузлы и кухня",
+    priceType: "per_m2",
+    price: 1650,
+    availableFor: ["apartment", "house", "works"],
+    preview: "/images/services/apartment.webp",
+    suggests: ["waterproofing", "base"],
+  },
+  {
+    id: "waterproofing",
+    category: "finishing",
+    title: "Гидроизоляция",
+    hint: "Мокрые зоны",
+    priceType: "per_m2",
+    price: 620,
+    availableFor: ["apartment", "house", "works"],
+    preview: "/images/services/construction.webp",
+  },
+
+  // ── Комплектация ────────────────────────────────────────────
+  {
+    id: "doors",
+    category: "completion",
+    title: "Монтаж дверей",
+    hint: "Межкомнатные и входные",
+    priceType: "fixed",
+    price: 36000,
+    availableFor: ["apartment", "house", "works"],
+    preview: "/images/services/other.webp",
+  },
+  {
+    id: "windows",
+    category: "completion",
+    title: "Окна",
+    hint: "Монтаж или замена конструкций",
+    priceType: "per_unit",
+    price: 12500,
+    availableFor: ["apartment", "house", "works", "windows"],
+    preview: "/images/services/windows.webp",
+  },
+  {
+    id: "delivery",
+    category: "completion",
+    title: "Доставка на объект",
+    priceType: "fixed",
+    price: 28000,
+    availableFor: ["apartment", "house", "works", "windows"],
+    preview: "/images/services/materials.webp",
+  },
+  {
+    id: "materials",
+    category: "completion",
+    title: "Закупка материалов",
+    hint: "Подбор, закупка и приёмка",
+    priceType: "percentage",
+    price: 12,
+    availableFor: ["apartment", "house", "works", "windows"],
+    preview: "/images/services/materials.webp",
+  },
+];
 
 export type ObjectType = {
   id: ObjectTypeId;
   label: string;
-  hint?: string;
-  unit: Unit;
+  /** Коэффициент сложности объекта. */
+  coefficient: number;
+  /** Спрашивать ли площадь. */
+  askArea: boolean;
+  /** Единица объёма для услуг с per_unit. */
   unitLabel: string;
-  /** Диапазон объёма для слайдера. */
-  range: { min: number; max: number; step: number; default: number };
-  /** Спрашивать ли уровень отделки. */
-  askLevel: boolean;
-  scopes: ScopeOption[];
+  area: { min: number; max: number; step: number; default: number };
+  /** Количество конструкций — для типа «Окна». */
+  units?: { min: number; max: number; step: number; default: number };
 };
-
-const FINISH_WORKS = ["Демонтаж", "Черновые работы", "Электрика", "Сантехника", "Отделка"];
 
 export const objectTypes: ObjectType[] = [
   {
     id: "apartment",
     label: "Квартира",
-    hint: "Под ключ и отдельные работы",
-    unit: "sqm",
-    unitLabel: "м²",
-    range: { min: 20, max: 400, step: 1, default: 82 },
-    askLevel: true,
-    scopes: [
-      {
-        id: "cosmetic",
-        label: "Косметический ремонт",
-        hint: "Без замены коммуникаций",
-        rate: 6500,
-        works: ["Подготовка поверхностей", "Отделка", "Финишные работы"],
-      },
-      {
-        id: "capital",
-        label: "Капитальный ремонт",
-        hint: "С заменой коммуникаций",
-        rate: 11500,
-        works: FINISH_WORKS,
-      },
-      {
-        id: "turnkey",
-        label: "Под ключ",
-        hint: "Полный цикл с комплектацией",
-        rate: 14500,
-        works: [...FINISH_WORKS, "Комплектация"],
-      },
-      {
-        id: "premium",
-        label: "Дизайнерский / премиальный",
-        hint: "По дизайн-проекту",
-        rate: 21000,
-        works: [...FINISH_WORKS, "Работа по дизайн-проекту", "Комплектация"],
-      },
-    ],
+    coefficient: 1,
+    askArea: true,
+    unitLabel: "шт.",
+    area: { min: 20, max: 500, step: 1, default: 82 },
   },
   {
     id: "house",
-    label: "Дом / коттедж",
-    hint: "Строительство и отделка",
-    unit: "sqm",
-    unitLabel: "м²",
-    range: { min: 40, max: 800, step: 5, default: 180 },
-    askLevel: true,
-    scopes: [
-      {
-        id: "repair",
-        label: "Ремонт",
-        hint: "Отделка готового дома",
-        rate: 9500,
-        works: ["Демонтаж", "Черновые работы", "Отделка"],
-      },
-      {
-        id: "construction",
-        label: "Строительные работы",
-        hint: "Коробка и инженерия",
-        rate: 26000,
-        works: ["Подготовка участка", "Строительные работы", "Инженерные системы"],
-      },
-      {
-        id: "turnkey",
-        label: "Под ключ",
-        hint: "От участка до готового дома",
-        rate: 38000,
-        works: ["Строительные работы", "Инженерные системы", "Отделка", "Комплектация"],
-      },
-      {
-        id: "terrace",
-        label: "Терраса",
-        hint: "Площадь террасы",
-        rate: 14000,
-        works: ["Основание", "Каркас", "Настил и отделка"],
-      },
-    ],
+    label: "Дом",
+    coefficient: 1.2,
+    askArea: true,
+    unitLabel: "шт.",
+    area: { min: 40, max: 800, step: 5, default: 180 },
   },
   {
     id: "works",
     label: "Отдельные работы",
-    hint: "Без полного ремонта",
-    unit: "sqm",
-    unitLabel: "м²",
-    range: { min: 10, max: 500, step: 5, default: 60 },
-    askLevel: false,
-    scopes: [
-      { id: "demolition", label: "Демонтаж", rate: 1800, works: ["Демонтаж", "Вывоз мусора"] },
-      { id: "rough", label: "Черновые работы", rate: 4200, works: ["Стяжка", "Штукатурка", "Выравнивание"] },
-      { id: "electric", label: "Электрика", rate: 2600, works: ["Разводка", "Монтаж оборудования"] },
-      { id: "plumbing", label: "Сантехника", rate: 2900, works: ["Разводка", "Установка приборов"] },
-      { id: "finishing", label: "Отделка", rate: 5400, works: ["Подготовка", "Финишная отделка"] },
-    ],
+    coefficient: 1,
+    askArea: true,
+    unitLabel: "шт.",
+    area: { min: 10, max: 500, step: 5, default: 40 },
   },
   {
     id: "windows",
     label: "Окна",
-    hint: "Монтаж, замена, ремонт",
-    unit: "piece",
+    coefficient: 1,
+    askArea: false,
     unitLabel: "шт.",
-    range: { min: 1, max: 40, step: 1, default: 5 },
-    askLevel: false,
-    scopes: [
-      { id: "install", label: "Монтаж", rate: 9500, works: ["Замер", "Монтаж", "Отделка откосов"] },
-      { id: "replace", label: "Замена", rate: 12500, works: ["Демонтаж", "Монтаж", "Отделка откосов"] },
-      { id: "repair", label: "Ремонт", rate: 4500, works: ["Диагностика", "Ремонт", "Регулировка"] },
-      { id: "service", label: "Обслуживание", rate: 2500, works: ["Регулировка", "Замена уплотнителей"] },
-    ],
+    area: { min: 0, max: 0, step: 1, default: 0 },
+    units: { min: 1, max: 40, step: 1, default: 5 },
   },
   {
     id: "other",
     label: "Другое",
-    hint: "Нестандартная задача",
-    unit: "none",
+    coefficient: 1,
+    askArea: false,
     unitLabel: "",
-    range: { min: 0, max: 0, step: 1, default: 0 },
-    askLevel: false,
-    scopes: [
-      {
-        id: "custom",
-        label: "Нестандартная задача",
-        // Считать вслепую нельзя: объём определяется только после разговора.
-        rate: null,
-        works: ["Состав работ определяется после обсуждения"],
-      },
-    ],
+    area: { min: 0, max: 0, step: 1, default: 0 },
   },
 ];
 
-/** Уровень отделки — множитель к ставке работ. */
-export const levels = [
-  { id: "standard", label: "Стандарт", hint: "Практичные решения", factor: 1 },
-  { id: "comfort", label: "Комфорт", hint: "Более качественные материалы", factor: 1.25 },
-  { id: "premium", label: "Премиум", hint: "Сложные решения и отделка", factor: 1.6 },
-];
+/** Количество окон по умолчанию, когда услуга «Окна» выбрана на другом объекте. */
+export const DEFAULT_WINDOW_UNITS = 5;
 
-/**
- * Дополнительные услуги.
- * kind: "perUnit" — цена за м²/шт., "percent" — процент от стоимости работ,
- * "fixed" — фиксированная сумма за объект.
- */
-export const extraOptions = [
-  {
-    id: "materials",
-    label: "Закупка материалов",
-    hint: "Подбор, закупка и доставка",
-    kind: "percent" as const,
-    value: 0.12,
-    work: "Комплектация",
-  },
-  {
-    id: "demolition",
-    label: "Демонтаж",
-    hint: "Если помещение не подготовлено",
-    kind: "perUnit" as const,
-    value: 1800,
-    work: "Демонтаж",
-  },
-  {
-    id: "electric",
-    label: "Электрика",
-    hint: "Полная разводка",
-    kind: "perUnit" as const,
-    value: 2600,
-    work: "Электрика",
-  },
-  {
-    id: "plumbing",
-    label: "Сантехника",
-    hint: "Разводка и приборы",
-    kind: "perUnit" as const,
-    value: 2900,
-    work: "Сантехника",
-  },
-  {
-    id: "windows",
-    label: "Окна",
-    hint: "Монтаж или замена",
-    kind: "fixed" as const,
-    value: 60000,
-    work: "Окна",
-  },
-  {
-    id: "design",
-    label: "Дизайн-проект",
-    hint: "Планировки и визуализации",
-    kind: "perUnit" as const,
-    value: 2200,
-    work: "Работа по дизайн-проекту",
-  },
-];
-
-export type ExtraOption = (typeof extraOptions)[number];
-
-export type PriceLine = { label: string; amount: number; note?: string };
-
-export type Estimate = {
-  /** Расчёт возможен: тип работ имеет ставку и задан объём. */
-  calculable: boolean;
-  lines: PriceLine[];
+export type TotalBreakdown = {
+  works: number;
+  materials: number;
   total: number;
-  min: number;
-  max: number;
+  selectedCount: number;
+  /** Стоимость каждой выбранной услуги — для строки и для заявки. */
+  perService: Record<string, number>;
 };
 
 /**
- * Расчёт сметы. Чистая функция без побочных эффектов — её легко
- * проверить и переиспользовать вне компонента.
+ * Расчёт стоимости. Чистая функция: её можно проверить отдельно
+ * от интерфейса и переиспользовать в заявке.
+ *
+ * Порядок важен: процентные услуги считаются от суммы остальных,
+ * иначе процент от процента давал бы неверный итог.
  */
-export function estimate(input: {
+export function calculateTotal(input: {
   objectType: ObjectType | null;
-  scope: ScopeOption | null;
-  amount: number;
-  levelId: string | null;
-  extraIds: string[];
-}): Estimate {
-  const { objectType, scope, amount, levelId, extraIds } = input;
-  const empty: Estimate = { calculable: false, lines: [], total: 0, min: 0, max: 0 };
+  area: number;
+  units: number;
+  selectedIds: string[];
+}): TotalBreakdown {
+  const { objectType, area, units, selectedIds } = input;
+  const empty: TotalBreakdown = {
+    works: 0,
+    materials: 0,
+    total: 0,
+    selectedCount: 0,
+    perService: {},
+  };
+  if (!objectType || selectedIds.length === 0) return empty;
 
-  if (!objectType || !scope || scope.rate === null) return empty;
-  if (objectType.unit !== "none" && amount <= 0) return empty;
+  const selected = services.filter((service) => selectedIds.includes(service.id));
+  const perService: Record<string, number> = {};
+  let works = 0;
 
-  const level = levels.find((item) => item.id === levelId);
-  const levelFactor = objectType.askLevel && level ? level.factor : 1;
-  const units = objectType.unit === "none" ? 1 : amount;
+  selected
+    .filter((service) => service.priceType !== "percentage")
+    .forEach((service) => {
+      let amount = 0;
+      if (service.priceType === "per_m2") amount = service.price * area;
+      else if (service.priceType === "per_unit") amount = service.price * units;
+      else amount = service.price;
 
-  const base = Math.round(scope.rate * units * levelFactor);
-  const lines: PriceLine[] = [
-    {
-      label: scope.label,
-      amount: base,
-      note:
-        objectType.unit === "none"
-          ? undefined
-          : `${scope.rate.toLocaleString("ru-RU")} ₽ × ${units} ${objectType.unitLabel}` +
-            (levelFactor !== 1 && level ? ` · ${level.label}` : ""),
-    },
-  ];
-
-  extraIds.forEach((id) => {
-    const extra = extraOptions.find((item) => item.id === id);
-    if (!extra) return;
-    if (extra.kind === "percent") {
-      lines.push({
-        label: extra.label,
-        amount: Math.round(base * extra.value),
-        note: `${Math.round(extra.value * 100)}% от стоимости работ`,
-      });
-      return;
-    }
-    if (extra.kind === "fixed") {
-      lines.push({ label: extra.label, amount: extra.value, note: "фиксированная стоимость" });
-      return;
-    }
-    lines.push({
-      label: extra.label,
-      amount: Math.round(extra.value * units),
-      note: `${extra.value.toLocaleString("ru-RU")} ₽ × ${units} ${objectType.unitLabel}`,
+      amount = Math.round(amount * objectType.coefficient);
+      perService[service.id] = amount;
+      works += amount;
     });
-  });
 
-  const total = lines.reduce((sum, line) => sum + line.amount, 0);
-  // Округляем границы до десятков тысяч: точность до рубля здесь ложная.
-  const round = (value: number) => Math.round(value / 10000) * 10000;
+  let materials = 0;
+  selected
+    .filter((service) => service.priceType === "percentage")
+    .forEach((service) => {
+      const amount = Math.round((works * service.price) / 100);
+      perService[service.id] = amount;
+      materials += amount;
+    });
 
   return {
-    calculable: true,
-    lines,
-    total,
-    min: round(total * (1 - RANGE_SPREAD)),
-    max: round(total * (1 + RANGE_SPREAD)),
+    works,
+    materials,
+    total: works + materials,
+    selectedCount: selected.length,
+    perService,
   };
 }
 
+/** Предварительная стоимость одной услуги — для строки списка. */
+export function servicePrice(
+  service: Service,
+  objectType: ObjectType | null,
+  area: number,
+  units: number,
+  worksSubtotal: number,
+): number {
+  if (!objectType) return 0;
+  if (service.priceType === "percentage") {
+    return Math.round((worksSubtotal * service.price) / 100);
+  }
+  const base =
+    service.priceType === "per_m2"
+      ? service.price * area
+      : service.priceType === "per_unit"
+        ? service.price * units
+        : service.price;
+  return Math.round(base * objectType.coefficient);
+}
+
 export function formatMoney(value: number): string {
-  return `${value.toLocaleString("ru-RU")} ₽`;
+  return `${Math.max(0, Math.round(value)).toLocaleString("ru-RU")} ₽`;
 }
