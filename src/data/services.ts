@@ -42,6 +42,8 @@ export const services: Service[] = [
     titleLines: ["СТРОИТЕЛЬНО-", "МОНТАЖНЫЕ"],
     description: "Различные виды строительных и монтажных работ.",
     photo: "cool",
+    image: "/images/services/construction.webp",
+    imageAlt: "Объект в стадии строительства: бетонные конструкции, металлическая лестница со стеклянным ограждением",
   },
   {
     id: "windows",
