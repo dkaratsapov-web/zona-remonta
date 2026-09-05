@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 300" role="img" aria-labelledby="title desc">
+<title id="title">Зона Ремонта</title>
+<desc id="desc">Логотип: геометрический знак дома с красным квадратом и название ЗОНА РЕМОНТА.</desc>
+
+<!-- Mark -->
+<g transform="translate(250 18)">
+  <!-- Outer architectural house -->
+  <path d="M130 8 L232 70 L232 184 L198 184 L198 90 L130 49 L62 90 L62 184 L28 184 L28 70 Z"
+        fill="#F5F5F5"/>
+  <!-- Inner cutout / room -->
+  <path d="M130 63 L188 98 L188 184 L156 184 L156 116 L130 100 L104 116 L104 184 L72 184 L72 98 Z"
+        fill="#080808"/>
+  <!-- Red zone -->
+  <rect x="142" y="146" width="34" height="34" fill="#E51B23"/>
+</g>
+
+<!-- Wordmark -->
+<text x="380" y="245"
+      text-anchor="middle"
+      fill="#F5F5F5"
+      font-family="Arial, Helvetica, sans-serif"
+      font-size="38"
+      font-weight="700"
+      letter-spacing="6">ЗОНА РЕМОНТА</text>
+</svg>

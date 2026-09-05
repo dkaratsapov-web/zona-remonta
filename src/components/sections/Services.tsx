@@ -1,11 +1,13 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { initGsap, ScrollTrigger } from "@/lib/animations";
 import { usePrefersReducedMotion } from "@/lib/hooks";
-import { services } from "@/data/services";
+import { services, type Service } from "@/data/services";
 import { Photo } from "@/components/ui/Photo";
 import { SectionLabel } from "@/components/ui/SectionLabel";
+import { ServiceModal } from "./ServiceModal";
+import { track } from "@/lib/analytics";
 
 /**
  * Desktop — закреплённая сцена: вертикальный скролл двигает ленту вбок.
@@ -18,6 +20,7 @@ export function Services() {
   const root = useRef<HTMLElement>(null);
   const trackRef = useRef<HTMLUListElement>(null);
   const progressRef = useRef<HTMLSpanElement>(null);
+  const [active, setActive] = useState<Service | null>(null);
   const reduced = usePrefersReducedMotion();
 
   useEffect(() => {
@@ -95,7 +98,17 @@ export function Services() {
       <div className="services__viewport">
         <ul className="services__track" ref={trackRef}>
           {services.map((service) => (
-            <li className="service-card" key={service.id} data-cursor="project">
+            <li key={service.id}>
+              <button
+                type="button"
+                className="service-card"
+                data-cursor="project"
+                aria-haspopup="dialog"
+                onClick={() => {
+                  setActive(service);
+                  track("project_view", { service_id: service.id });
+                }}
+              >
               <div className="service-card__media">
                 <Photo
                   variant={service.photo}
@@ -117,11 +130,13 @@ export function Services() {
                   <i />→
                 </span>
               </div>
+              </button>
             </li>
           ))}
         </ul>
       </div>
 
+      <ServiceModal service={active} onClose={() => setActive(null)} />
     </section>
   );
 }

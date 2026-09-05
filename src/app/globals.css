@@ -617,12 +617,14 @@ button, input, textarea, select { font: inherit; color: inherit; }
    первым в разметке, поэтому чередования не было вовсе.
    Кадр всегда получает бо́льшую колонку — он главный в композиции. */
 .project { display: grid; grid-template-columns: 1.35fr 1fr; gap: clamp(24px, 4vw, 64px); align-items: center; }
-.project__frame { grid-column: 1; }
-.project__info { grid-column: 2; }
+/* Строку указываем явно: без неё браузер, встретив кадр в колонке 2,
+   переносит текст на вторую строку — блок разъезжается по вертикали. */
+.project__frame { grid-column: 1; grid-row: 1; }
+.project__info { grid-column: 2; grid-row: 1; }
 
 .project--flip { grid-template-columns: 1fr 1.35fr; }
-.project--flip .project__frame { grid-column: 2; }
-.project--flip .project__info { grid-column: 1; text-align: right; }
+.project--flip .project__frame { grid-column: 2; grid-row: 1; }
+.project--flip .project__info { grid-column: 1; grid-row: 1; text-align: right; }
 /* Зеркалим и внутреннюю раскладку, иначе текст выглядит просто сдвинутым */
 .project--flip .project__meta { justify-content: flex-end; }
 .project--flip .project__title span { display: block; }
@@ -996,3 +998,146 @@ button, input, textarea, select { font: inherit; color: inherit; }
 }
 .service-card:hover .service-card__scrim { opacity: 0.9; }
 .service-card__text { color: #c8c8c8; }
+
+/* ═══════════════════════  MODAL  ═══════════════════════ */
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 95;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(16px, 4vw, 48px);
+  background: rgba(4, 4, 4, 0.82);
+  backdrop-filter: blur(6px);
+  animation: modal-in 0.25s ease both;
+}
+.modal__panel {
+  position: relative;
+  width: min(1040px, 100%);
+  max-height: 100%;
+  overflow-y: auto;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  animation: panel-in 0.35s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.modal__close {
+  position: absolute;
+  right: 14px;
+  top: 14px;
+  z-index: 3;
+  width: 42px;
+  height: 42px;
+  background: rgba(8, 8, 8, 0.7);
+  border: 1px solid var(--line);
+  color: var(--text);
+  font-size: 16px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+.modal__close:hover { border-color: var(--accent); background: rgba(229, 32, 42, 0.14); }
+
+@keyframes modal-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes panel-in { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+
+.service-modal { display: grid; grid-template-columns: 380px 1fr; }
+.service-modal__media { position: relative; min-height: 100%; }
+.service-modal__media .photo { position: absolute; inset: 0; }
+.service-modal__num {
+  position: absolute;
+  left: 24px;
+  top: 22px;
+  z-index: 2;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: var(--accent-text);
+}
+.service-modal__body { padding: clamp(24px, 3vw, 44px); }
+.service-modal__title {
+  margin: 0;
+  font-size: clamp(26px, 3vw, 40px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.06;
+  padding-right: 48px;
+}
+.service-modal__intro { margin: 20px 0 0; font-size: 16px; color: #dedede; line-height: 1.75; }
+.service-modal__label { margin: 32px 0 16px; }
+.service-modal__works { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+.service-modal__works li {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  padding: 9px 0;
+  font-size: 15px;
+  border-bottom: 1px solid var(--line-soft);
+}
+.service-modal__works li > span { width: 5px; height: 5px; background: var(--accent); flex: none; }
+.service-modal__notes { margin: 24px 0 0; padding-left: 18px; }
+.service-modal__notes li { font-size: 14px; color: var(--muted); line-height: 1.8; }
+.service-modal__actions {
+  margin-top: 32px;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  flex-wrap: wrap;
+}
+.service-modal__foot {
+  margin: 22px 0 0;
+  padding-top: 18px;
+  border-top: 1px solid var(--line-soft);
+  font-size: 12px;
+  color: var(--dim);
+}
+
+@media (max-width: 860px) {
+  .service-modal { grid-template-columns: 1fr; }
+  .service-modal__media { height: 220px; }
+}
+
+/* Карточка услуги стала кнопкой — сбрасываем стили кнопки, вид не меняется */
+.service-card {
+  padding: 0;
+  border-radius: 0;
+  text-align: left;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  background: none;
+}
+.service-card:focus-visible { outline: 2px solid var(--accent-text); outline-offset: 3px; }
+
+/* ── Печать манифеста ──
+   Символы скрыты только при живом JS: без него абзац виден целиком.
+   Пробелы не схлопываются, поэтому перенос строк ведёт себя как обычно. */
+.manifest__headline { white-space: normal; }
+.js .manifest__headline .ch { opacity: 0; }
+/* Селектор должен быть не легче того, что скрывает символ, иначе
+   набранный текст остаётся невидимым при полностью рабочем скрипте. */
+.js .manifest__headline .ch--on { opacity: 1; }
+
+/* Каретка идёт за последним набранным символом, а не стоит в одной точке */
+.manifest__headline .ch--caret { position: relative; }
+.manifest__headline .ch--caret::after {
+  content: "";
+  position: absolute;
+  right: -0.12em;
+  top: 0.1em;
+  bottom: 0.08em;
+  width: 0.045em;
+  background: var(--accent);
+  animation: caret-blink 0.9s steps(1) infinite;
+}
+@keyframes caret-blink {
+  0%, 55% { opacity: 1; }
+  56%, 100% { opacity: 0; }
+}
+
+.manifest__rail > span { transform-origin: top; transition: transform 0.12s linear; }
+
+@media (prefers-reduced-motion: reduce) {
+  .js .manifest__headline .ch { opacity: 1; }
+  .manifest__headline .ch--caret::after { display: none; }
+}
+

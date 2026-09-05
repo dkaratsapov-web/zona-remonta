@@ -1,86 +1,108 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { initGsap } from "@/lib/animations";
+import { useEffect, useRef, useState } from "react";
 import { usePrefersReducedMotion } from "@/lib/hooks";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 
-/**
- * Фраза разбита ПОСЛОВНО, а не по строкам: куски склеиваются в поток,
- * поэтому каждое слово выводится вместе со своим пробелом. Разбивка по
- * строкам съедала пробелы на стыках («наборотдельных»).
- */
-const ACCENT = ["один", "процесс"];
-const HEADLINE = "Ремонт — это не набор отдельных работ. Это один процесс, за который должен отвечать один подрядчик."
-  .split(" ")
-  .map((word) => ({
-    word,
-    // «один процесс» подсвечиваем красным, но только первое вхождение слова «один»
-    accent: false as boolean,
-  }));
+const TEXT =
+  "Ремонт — это не набор отдельных работ. Это один процесс, за который должен отвечать один подрядчик.";
 
-// помечаем ровно словосочетание «один процесс», а не каждое слово «один»
-for (let i = 0; i < HEADLINE.length - 1; i += 1) {
-  if (HEADLINE[i].word === ACCENT[0] && HEADLINE[i + 1].word.startsWith(ACCENT[1])) {
-    HEADLINE[i].accent = true;
-    HEADLINE[i + 1].accent = true;
-    break;
-  }
+/** Красным подсвечивается ровно словосочетание «один процесс». */
+const ACCENT_FROM = TEXT.indexOf("один процесс");
+const ACCENT_TO = ACCENT_FROM + "один процесс".length;
+
+const CHARS = Array.from(TEXT).map((char, index) => ({
+  char,
+  accent: index >= ACCENT_FROM && index < ACCENT_TO,
+}));
+
+/**
+ * Ритм печати.
+ *
+ * Равномерная выдача символов читается как машина. Человек печатает
+ * рывками: внутри слова быстро, на знаках препинания задумывается,
+ * иногда сбивается на долю секунды. Эти три правила и заданы ниже —
+ * из них складывается ощущение живого набора.
+ */
+function delayFor(char: string, next: string | undefined): number {
+  const base = 26 + Math.random() * 26;
+  if (char === "." || char === "!" || char === "?") return base + 380 + Math.random() * 140;
+  if (char === "," || char === "—") return base + 200 + Math.random() * 120;
+  if (char === " ") return base + (next && next === next.toUpperCase() ? 90 : 24);
+  // Редкая запинка — примерно раз на двадцать символов
+  if (Math.random() < 0.05) return base + 110 + Math.random() * 90;
+  return base;
 }
 
 /**
- * Текст не «выезжает» абзацем: по мере прокрутки слова перекрашиваются
- * из приглушённого в белый — красная линия слева работает индикатором чтения.
+ * Манифест печатается по мере появления в кадре.
+ *
+ * Текст целиком лежит в разметке: скринридер читает его как обычный
+ * абзац, поисковик видит полностью, а без JS он просто виден сразу —
+ * скрытие символов навешено под классом .js.
  */
 export function Manifest() {
   const root = useRef<HTMLElement>(null);
+  const [typed, setTyped] = useState(0);
   const reduced = usePrefersReducedMotion();
 
   useEffect(() => {
     const node = root.current;
+    // При reduced-motion печати нет вовсе: текст показывается сразу,
+    // значение берётся при отрисовке, а не через состояние.
     if (!node || reduced) return;
 
-    const gsap = initGsap();
-    const ctx = gsap.context(() => {
-      gsap.to("[data-word]", {
-        color: "#F5F5F5",
-        stagger: 0.06,
-        ease: "none",
-        scrollTrigger: { trigger: node, start: "top 72%", end: "bottom 65%", scrub: true },
-      });
-      gsap.fromTo(
-        "[data-manifest-line]",
-        { scaleY: 0.08 },
-        {
-          scaleY: 1,
-          ease: "none",
-          transformOrigin: "top",
-          scrollTrigger: { trigger: node, start: "top 80%", end: "bottom 60%", scrub: true },
-        },
-      );
-    }, node);
+    let timer = 0;
+    let index = 0;
 
-    return () => ctx.revert();
+    const step = () => {
+      index += 1;
+      setTyped(index);
+      if (index >= CHARS.length) return;
+      timer = window.setTimeout(step, delayFor(CHARS[index - 1].char, CHARS[index]?.char));
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (!entries[0]?.isIntersecting) return;
+        observer.disconnect();
+        timer = window.setTimeout(step, 260);
+      },
+      { threshold: 0.35 },
+    );
+
+    observer.observe(node);
+    return () => {
+      observer.disconnect();
+      window.clearTimeout(timer);
+    };
   }, [reduced]);
+
+  const shown = reduced ? CHARS.length : typed;
+  const done = shown >= CHARS.length;
 
   return (
     <section className="section manifest" id="about" ref={root}>
       <span className="manifest__rail" aria-hidden="true">
-        <span data-manifest-line />
+        <span
+          data-manifest-line
+          style={{ transform: `scaleY(${Math.max(0.06, shown / CHARS.length)})` }}
+        />
       </span>
 
       <div className="container">
         <SectionLabel number="02" title="Манифест" />
 
         <p className="manifest__headline">
-          {HEADLINE.map((chunk, index) => (
+          {CHARS.map((item, index) => (
             <span
               key={index}
-              data-word=""
-              style={{ color: chunk.accent ? "var(--accent-text)" : "#3A3A3A" }}
+              className={`ch${index < shown ? " ch--on" : ""}${
+                !done && index === shown - 1 ? " ch--caret" : ""
+              }`}
+              style={item.accent ? { color: "var(--accent-text)" } : undefined}
             >
-              {chunk.word}
-              {index < HEADLINE.length - 1 ? " " : ""}
+              {item.char === " " ? " " : item.char}
             </span>
           ))}
         </p>
