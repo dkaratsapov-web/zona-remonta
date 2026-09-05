@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { track } from "@/lib/analytics";
+import { useUi } from "@/components/ui/UiContext";
 
 /**
  * Мобильная плавающая кнопка. Появляется после первого экрана
@@ -9,6 +10,7 @@ import { track } from "@/lib/analytics";
  */
 export function StickyCta() {
   const [visible, setVisible] = useState(false);
+  const { openCalculator } = useUi();
 
   useEffect(() => {
     const calculator = document.getElementById("calculator");
@@ -29,14 +31,18 @@ export function StickyCta() {
   }, []);
 
   return (
-    <a
-      href="#calculator"
+    <button
+      type="button"
       className={`sticky-cta ${visible ? "sticky-cta--visible" : ""}`}
-      onClick={() => track("hero_cta_click", { place: "sticky" })}
+      aria-haspopup="dialog"
+      onClick={() => {
+        track("hero_cta_click", { place: "sticky" });
+        openCalculator();
+      }}
       tabIndex={visible ? 0 : -1}
       aria-hidden={!visible}
     >
       Рассчитать стоимость
-    </a>
+    </button>
   );
 }

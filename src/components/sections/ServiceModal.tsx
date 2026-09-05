@@ -5,20 +5,24 @@ import { Modal } from "@/components/ui/Modal";
 import { Photo } from "@/components/ui/Photo";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 import { track } from "@/lib/analytics";
+import { useUi, LEAD_TOPICS } from "@/components/ui/UiContext";
+import type { ObjectTypeId } from "@/data/calculatorConfig";
 
 type Props = { service: Service | null; onClose: () => void };
 
-export function ServiceModal({ service, onClose }: Props) {
-  if (!service) return null;
+/** Направление услуги → предвыбранный тип объекта в калькуляторе. */
+const OBJECT_BY_SERVICE: Record<string, ObjectTypeId> = {
+  apartments: "apartment",
+  houses: "house",
+  construction: "works",
+  windows: "windows",
+  other: "other",
+  materials: "other",
+};
 
-  const goTo = (hash: string, event: "calculator_start" | "final_cta_click") => {
-    onClose();
-    track(event, { from: `service_${service.id}` });
-    // Закрытие возвращает фокус, поэтому прокрутку запускаем следующим кадром
-    requestAnimationFrame(() => {
-      document.querySelector(hash)?.scrollIntoView({ behavior: "smooth", block: "start" });
-    });
-  };
+export function ServiceModal({ service, onClose }: Props) {
+  const { openCalculator, openLead } = useUi();
+  if (!service) return null;
 
   return (
     <Modal open onClose={onClose} labelledBy={`service-modal-${service.id}`}>
@@ -58,13 +62,24 @@ export function ServiceModal({ service, onClose }: Props) {
           ) : null}
 
           <div className="service-modal__actions">
-            <MagneticButton onClick={() => goTo("#calculator", "calculator_start")}>
+            <MagneticButton
+              onClick={() => {
+                track("calculator_start", { from: `service_${service.id}` });
+                onClose();
+                openCalculator(OBJECT_BY_SERVICE[service.id] ?? null);
+              }}
+            >
               Рассчитать стоимость <span aria-hidden="true">→</span>
             </MagneticButton>
             <button
               type="button"
               className="link-underline"
-              onClick={() => goTo("#final-cta", "final_cta_click")}
+              aria-haspopup="dialog"
+              onClick={() => {
+                track("final_cta_click", { from: `service_${service.id}` });
+                onClose();
+                openLead(LEAD_TOPICS.service(service.title, service.id));
+              }}
               style={{ background: "none", border: 0, cursor: "pointer" }}
             >
               Обсудить задачу

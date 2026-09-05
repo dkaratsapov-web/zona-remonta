@@ -1,11 +1,50 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Phone, Send, MessageCircle } from "lucide-react";
 import { siteConfig, hasPhone, hasMessengers } from "@/data/siteConfig";
 import { track } from "@/lib/analytics";
+import { useUi, LEAD_TOPICS } from "@/components/ui/UiContext";
 import { Logo } from "./Logo";
 
+/**
+ * Кнопка мессенджера. Есть ссылка — обычный переход; ссылки нет —
+ * открывается заявка. Мёртвых кнопок в шапке быть не должно.
+ */
+function MessengerButton({
+  label,
+  href,
+  onFallback,
+  icon,
+}: {
+  label: string;
+  href: string;
+  onFallback: () => void;
+  icon: React.ReactNode;
+}) {
+  if (href) {
+    return (
+      <a href={href} className="header-contacts__im" aria-label={label} title={label}>
+        {icon}
+      </a>
+    );
+  }
+  return (
+    <button
+      type="button"
+      className="header-contacts__im"
+      aria-label={label}
+      title={label}
+      aria-haspopup="dialog"
+      onClick={onFallback}
+    >
+      {icon}
+    </button>
+  );
+}
+
 export function Header() {
+  const { openLead } = useUi();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -46,9 +85,46 @@ export function Header() {
                 {item.label}
               </a>
             ))}
-            <a href="#final-cta" className="btn btn--ghost site-nav__cta">
+
+            <span className="header-contacts">
+              <a
+                href={`tel:${siteConfig.contacts.phone}`}
+                className="header-contacts__phone"
+                onClick={() => track("phone_click", { place: "header" })}
+              >
+                <Phone size={15} aria-hidden="true" />
+                <span>{siteConfig.contacts.phoneDisplay}</span>
+              </a>
+
+              {/*
+                Мессенджеры: пока аккаунтов компании нет, кнопка не ведёт
+                в никуда и не притворяется рабочей ссылкой — она открывает
+                заявку, чтобы обращение всё равно дошло.
+              */}
+              <MessengerButton
+                label="Написать в Telegram"
+                href={siteConfig.contacts.telegram}
+                onFallback={() => openLead(LEAD_TOPICS.messenger("Telegram"))}
+                icon={<Send size={16} aria-hidden="true" />}
+              />
+              <MessengerButton
+                label="Написать в MAX"
+                href={siteConfig.contacts.max}
+                onFallback={() => openLead(LEAD_TOPICS.messenger("MAX"))}
+                icon={<MessageCircle size={16} aria-hidden="true" />}
+              />
+            </span>
+            <button
+              type="button"
+              className="btn btn--ghost site-nav__cta"
+              aria-haspopup="dialog"
+              onClick={() => {
+                track("final_cta_click", { place: "header" });
+                openLead(LEAD_TOPICS.discuss);
+              }}
+            >
               Обсудить проект
-            </a>
+            </button>
           </nav>
 
           <button

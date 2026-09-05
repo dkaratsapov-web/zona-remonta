@@ -7,12 +7,14 @@ import { track } from "@/lib/analytics";
 import { siteConfig } from "@/data/siteConfig";
 import { Photo } from "@/components/ui/Photo";
 import { MagneticButton } from "@/components/ui/MagneticButton";
+import { useUi } from "@/components/ui/UiContext";
 
 export function Hero() {
   const root = useRef<HTMLElement>(null);
   const photo = useRef<HTMLDivElement>(null);
   const reduced = usePrefersReducedMotion();
   const fine = useFinePointer();
+  const { openCalculator } = useUi();
 
   useEffect(() => {
     const node = root.current;
@@ -108,7 +110,12 @@ export function Hero() {
         </p>
 
         <div className="hero__actions" data-hero-fade>
-          <MagneticButton href="#calculator" onClick={() => track("hero_cta_click", { place: "hero" })}>
+          <MagneticButton
+            onClick={() => {
+              track("hero_cta_click", { place: "hero" });
+              openCalculator();
+            }}
+          >
             Рассчитать стоимость <span aria-hidden="true">→</span>
           </MagneticButton>
           <a href="#projects" className="link-underline">

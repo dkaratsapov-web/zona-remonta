@@ -1141,3 +1141,70 @@ button, input, textarea, select { font: inherit; color: inherit; }
   .manifest__headline .ch--caret::after { display: none; }
 }
 
+
+/* ═══════════  ФОРМЫ И КАЛЬКУЛЯТОР В ОКНАХ  ═══════════ */
+.calc-modal { padding: clamp(24px, 3vw, 40px); }
+.calc-modal__title {
+  margin: 0 0 clamp(20px, 2vw, 32px);
+  font-size: clamp(24px, 2.6vw, 34px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  padding-right: 48px;
+}
+.calculator--embedded { background: none; padding: 0; }
+.calculator--embedded .calculator__grid { grid-template-columns: 260px 1fr; gap: clamp(24px, 3vw, 48px); }
+.calculator--embedded .calculator__title { display: none; }
+.calculator--embedded .calculator__result { grid-template-columns: 1fr 340px; }
+@media (max-width: 900px) {
+  .calculator--embedded .calculator__grid,
+  .calculator--embedded .calculator__result { grid-template-columns: 1fr; }
+}
+
+.lead-modal { padding: clamp(24px, 3vw, 40px); max-width: 560px; }
+.lead-modal__title {
+  margin: 0;
+  font-size: clamp(24px, 2.6vw, 32px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  padding-right: 48px;
+}
+.lead-modal__text { margin: 14px 0 28px; font-size: 15px; color: var(--muted); line-height: 1.7; }
+.modal__panel:has(.lead-modal) { width: min(600px, 100%); }
+
+/* ═══════════  КОНТАКТЫ В ШАПКЕ  ═══════════ */
+.header-contacts { display: flex; align-items: center; gap: 14px; }
+.header-contacts__phone {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.2s ease;
+}
+.header-contacts__phone:hover { color: var(--accent-text); }
+.header-contacts__im {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border: 1px solid var(--line);
+  background: none;
+  color: var(--text);
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+}
+.header-contacts__im:hover {
+  border-color: var(--accent);
+  color: var(--accent-text);
+  background: rgba(229, 32, 42, 0.08);
+}
+
+/* На средних экранах шапка становится тесной: номер прячем, иконки
+   остаются — они дают тот же способ связаться, но занимают меньше места. */
+@media (max-width: 1439px) {
+  .header-contacts__phone span { display: none; }
+}

@@ -17,6 +17,31 @@ const CHARS = Array.from(TEXT).map((char, index) => ({
 }));
 
 /**
+ * Символы группируются по словам, а пробелы остаются обычным текстом
+ * между ними.
+ *
+ * Пробел, оказавшийся единственным символом внутри своего <span>,
+ * браузер отбрасывает как крайний пробел инлайн-бокса. Текст тогда
+ * становится одним сплошным «словом» без единой точки переноса
+ * и уезжает за край экрана.
+ */
+type Glyph = { char: string; accent: boolean; index: number };
+
+const WORDS: Glyph[][] = [];
+{
+  let current: Glyph[] = [];
+  CHARS.forEach((item, index) => {
+    if (item.char === " ") {
+      if (current.length) WORDS.push(current);
+      current = [];
+      return;
+    }
+    current.push({ ...item, index });
+  });
+  if (current.length) WORDS.push(current);
+}
+
+/**
  * Ритм печати.
  *
  * Равномерная выдача символов читается как машина. Человек печатает
@@ -94,15 +119,20 @@ export function Manifest() {
         <SectionLabel number="02" title="Манифест" />
 
         <p className="manifest__headline">
-          {CHARS.map((item, index) => (
-            <span
-              key={index}
-              className={`ch${index < shown ? " ch--on" : ""}${
-                !done && index === shown - 1 ? " ch--caret" : ""
-              }`}
-              style={item.accent ? { color: "var(--accent-text)" } : undefined}
-            >
-              {item.char === " " ? " " : item.char}
+          {WORDS.map((word, wordIndex) => (
+            <span className="word" key={wordIndex}>
+              {word.map((item) => (
+                <span
+                  key={item.index}
+                  className={`ch${item.index < shown ? " ch--on" : ""}${
+                    !done && item.index === shown - 1 ? " ch--caret" : ""
+                  }`}
+                  style={item.accent ? { color: "var(--accent-text)" } : undefined}
+                >
+                  {item.char}
+                </span>
+              ))}
+              {wordIndex < WORDS.length - 1 ? " " : ""}
             </span>
           ))}
         </p>

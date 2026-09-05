@@ -5,6 +5,8 @@ import { StickyCta } from "@/components/layout/StickyCta";
 import { ScrollProgress } from "@/components/layout/ScrollProgress";
 import { CustomCursor } from "@/components/ui/CustomCursor";
 import { Analytics } from "@/components/layout/Analytics";
+import { UiProvider } from "@/components/ui/UiContext";
+import { GlobalModals } from "@/components/ui/GlobalModals";
 
 import { Hero } from "@/components/sections/Hero";
 import { Manifest } from "@/components/sections/Manifest";
@@ -25,7 +27,8 @@ import { FinalCta } from "@/components/sections/FinalCta";
  */
 export default function Home() {
   return (
-    <div id="page">
+    <UiProvider>
+      <div id="page">
       <Preloader />
       <Analytics />
       <CustomCursor />
@@ -49,6 +52,8 @@ export default function Home() {
 
       <Footer />
       <StickyCta />
-    </div>
+      <GlobalModals />
+      </div>
+    </UiProvider>
   );
 }

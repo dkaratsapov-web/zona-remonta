@@ -34,8 +34,18 @@ const TOTAL_STEPS = 3;
  * Прогресс живёт в sessionStorage: случайное обновление страницы
  * не обнуляет уже данные ответы.
  */
-export function Calculator() {
-  const [state, setState] = useSessionState<State>("zr_calculator", INITIAL);
+type Props = {
+  /** Внутри модального окна секция-обёртка и фон не нужны. */
+  embedded?: boolean;
+  /** Предвыбранный тип объекта — когда калькулятор открыт из карточки услуги. */
+  initialObjectType?: ObjectTypeId | null;
+};
+
+export function Calculator({ embedded = false, initialObjectType = null }: Props) {
+  const [state, setState] = useSessionState<State>(
+    "zr_calculator",
+    initialObjectType ? { ...INITIAL, objectType: initialObjectType, step: 1 } : INITIAL,
+  );
   const [showResult, setShowResult] = useState(false);
   const started = useRef(false);
   const lastStep = useRef(0);
@@ -100,9 +110,11 @@ export function Calculator() {
     started.current = false;
   };
 
-  return (
-    <section className="section calculator" id="calculator">
-      <div className="container calculator__grid">
+  // Создавать компонент прямо в рендере нельзя: React пересоздавал бы
+  // всё поддерево на каждом кадре. Содержимое собирается в переменную,
+  // а обёртка выбирается на возврате.
+  const content = (
+      <div className={`calculator__grid ${embedded ? "" : "container"}`}>
         <div className="calculator__aside">
           <SectionLabel number="06" title="Калькулятор" />
           <h2 className="calculator__title">
@@ -341,6 +353,13 @@ export function Calculator() {
           )}
         </div>
       </div>
+  );
+
+  if (embedded) return <div className="calculator calculator--embedded">{content}</div>;
+
+  return (
+    <section className="section calculator" id="calculator">
+      {content}
     </section>
   );
 }

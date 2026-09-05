@@ -16,6 +16,9 @@ export type Project = {
   area: string | null;
   works: string | null;
   photo: PhotoVariant;
+  /** Реальное фото из public. Задано — рисуется вместо заглушки. */
+  image?: string;
+  imageAlt?: string;
   isDemo: boolean;
 };
 
@@ -29,6 +32,8 @@ export const projects: Project[] = [
     area: null,
     works: null,
     photo: "warm",
+    image: "/images/projects/project-01.webp",
+    imageAlt: "Гостиная и кухня-столовая после ремонта: панорамное остекление, тёплая подсветка, тёмная отделка",
     isDemo: true,
   },
   {

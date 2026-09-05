@@ -69,9 +69,14 @@ export function Projects() {
                 <div className="project__media" data-project-media>
                   <Photo
                     variant={project.photo}
+                    src={project.image}
+                    alt={project.imageAlt}
                     floor
                     edges
-                    demoLabel={project.isDemo ? "DEMO PROJECT — replace with real project" : undefined}
+                    /* Метка нужна только на градиентной заглушке: как только
+                       появляется настоящий кадр, она превращается в шум.
+                       Пометка о демо-проекте остаётся в src/data/projects.ts. */
+                    demoLabel={project.isDemo && !project.image ? "DEMO PROJECT — replace with real project" : undefined}
                   />
                 </div>
                 <span className="project__corner project__corner--tl" aria-hidden="true" />
