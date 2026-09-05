@@ -9,6 +9,7 @@ import { grantPersistence } from "@/lib/attribution";
 import { track } from "@/lib/analytics";
 import { siteConfig, hasPhone } from "@/data/siteConfig";
 import { TextField, TextArea, Honeypot } from "./Field";
+import { formatPhone } from "@/lib/phone";
 import { MagneticButton } from "./MagneticButton";
 
 type Props = {
@@ -54,6 +55,8 @@ export function LeadForm({
     handleSubmit,
     formState: { errors },
   } = useForm<LeadInput>({ resolver: zodResolver(leadSchema), mode: "onBlur" });
+
+  const phoneField = register("phone");
 
   const processLead = async (values: LeadInput) => {
     setStatus("sending");
@@ -130,8 +133,18 @@ export function LeadForm({
         inputMode="tel"
         placeholder="+7 (___) ___-__-__"
         autoComplete="tel"
+        maxLength={18}
         error={errors.phone?.message}
-        {...register("phone")}
+        {...phoneField}
+        onChange={(event) => {
+          // Приводим ввод к маске до того, как значение попадёт в форму:
+          // иначе в состоянии копились бы буквы и лишние цифры.
+          event.target.value = formatPhone(event.target.value);
+          void phoneField.onChange(event);
+        }}
+        onFocus={(event) => {
+          if (!event.target.value) event.target.value = "+7 ";
+        }}
       />
       {withComment ? (
         <TextArea

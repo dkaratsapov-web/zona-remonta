@@ -726,11 +726,17 @@ button, input, textarea, select { font: inherit; color: inherit; }
 @media (min-width: 1024px) {
   .process { padding-bottom: 0; }
   .process__scroll { height: 260vh; }
+  /* Сцена занимает весь экран под шапкой, содержимое центрируется по высоте. */
   .process__stage {
     position: sticky;
-    top: 92px;
-    padding-top: clamp(24px, 3vw, 40px);
+    top: 0;
+    min-height: 100vh;
+    display: grid;
+    align-content: center;
+    padding-top: calc(92px + clamp(16px, 2vw, 32px));
+    padding-bottom: clamp(16px, 2vw, 32px);
   }
+  .process__grid { align-items: center; }
 }
 .process__stage { padding-top: clamp(24px, 3vw, 40px); }
 .process__grid { display: grid; grid-template-columns: 1fr 1px 260px 300px; gap: clamp(24px, 4vw, 64px); align-items: start; }

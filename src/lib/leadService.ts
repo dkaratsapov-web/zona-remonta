@@ -1,6 +1,7 @@
 "use client";
 
 import { z } from "zod";
+import { isPhoneComplete } from "./phone";
 import { siteConfig } from "@/data/siteConfig";
 import { getLeadContext, type LeadContext } from "./attribution";
 
@@ -17,13 +18,13 @@ import { getLeadContext, type LeadContext } from "./attribution";
 
 export const leadSchema = z.object({
   name: z.string().trim().min(2, "Укажите имя").max(80, "Слишком длинное имя"),
+  // Проверяем количество цифр, а не написание: поле само приводит
+  // ввод к единому виду, поэтому регулярка по символам здесь избыточна.
   phone: z
     .string()
     .trim()
-    .min(6, "Укажите телефон")
-    .max(24, "Проверьте номер")
-    // Международный формат не ломаем: только цифры, плюс, пробелы и скобки.
-    .regex(/^\+?[\d\s()-]{6,24}$/u, "Проверьте номер"),
+    .min(1, "Укажите телефон")
+    .refine(isPhoneComplete, "Введите номер полностью — 11 цифр"),
   comment: z.string().trim().max(1500).optional(),
   consent: z.literal(true, { message: "Без согласия отправить нельзя" }),
 });
