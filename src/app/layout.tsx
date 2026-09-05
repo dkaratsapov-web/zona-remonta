@@ -3,6 +3,10 @@ import { Manrope } from "next/font/google";
 import { siteConfig } from "@/data/siteConfig";
 import "./globals.css";
 
+// Пути в metadata не получают basePath автоматически — подставляем вручную,
+// иначе на GitHub Pages фавикон запрашивается из корня домена.
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+
 const manrope = Manrope({
   subsets: ["latin", "cyrillic"],
   weight: ["300", "400", "600", "700", "800"],
@@ -22,7 +26,7 @@ export const metadata: Metadata = {
     siteName: siteConfig.name,
   },
   robots: { index: true, follow: true },
-  icons: { icon: "/favicon.svg" },
+  icons: { icon: `${basePath}/favicon.svg` },
 };
 
 export const viewport: Viewport = {
