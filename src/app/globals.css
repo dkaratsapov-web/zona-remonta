@@ -1661,3 +1661,9 @@ button, input, textarea, select { font: inherit; color: inherit; }
   .hero { min-height: auto; }
   .hero__inner { min-height: 100svh; display: flex; flex-direction: column; justify-content: flex-end; }
 }
+
+/* Стрелки спиннера в поле площади мешают: цифру набирают руками
+   или тянут слайдером, а стрелки только сужают поле для клика. */
+.area-control__input { -moz-appearance: textfield; appearance: textfield; }
+.area-control__input::-webkit-outer-spin-button,
+.area-control__input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }

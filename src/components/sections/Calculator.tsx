@@ -53,6 +53,14 @@ export function Calculator({ embedded = false, initialObjectType = null }: Props
   const [leadOpen, setLeadOpen] = useState(false);
   const [sheetOpen, setSheetOpen] = useState(false);
   const [editingArea, setEditingArea] = useState(false);
+  /**
+   * Черновик ручного ввода площади.
+   *
+   * Пока человек печатает, значение не зажимается по границам: иначе
+   * стёртое поле сразу становится минимумом, и набрать «150», начав
+   * с «1», невозможно. Границы применяются на выходе из поля.
+   */
+  const [areaDraft, setAreaDraft] = useState<string | null>(null);
   const deltaId = useRef(0);
   const opened = useRef(false);
   const reduced = usePrefersReducedMotion();
@@ -76,6 +84,19 @@ export function Calculator({ embedded = false, initialObjectType = null }: Props
   }, []);
 
   const update = (patch: Partial<State>) => setState({ ...state, ...patch });
+
+  /** Применяем границы один раз — когда человек закончил печатать. */
+  const commitArea = () => {
+    if (!objectType) return;
+    const parsed = Number(areaDraft);
+    const next =
+      areaDraft && Number.isFinite(parsed) && parsed > 0
+        ? Math.min(objectType.area.max, Math.max(objectType.area.min, parsed))
+        : area;
+    update({ area: next });
+    setAreaDraft(null);
+    track("calculator_area_changed" as never, { area: next });
+  };
 
   const showDelta = (value: number) => {
     if (reduced || value === 0) return;
@@ -205,22 +226,34 @@ export function Calculator({ embedded = false, initialObjectType = null }: Props
             {editingArea ? (
               <input
                 className="area-control__input"
-                type="number"
+                type="text"
+                inputMode="numeric"
                 autoFocus
-                min={objectType.area.min}
-                max={objectType.area.max}
-                value={area}
-                aria-label="Площадь объекта, м²"
-                onBlur={() => setEditingArea(false)}
+                value={areaDraft ?? String(area)}
+                aria-label={`Площадь объекта в м², от ${objectType.area.min} до ${objectType.area.max}`}
+                onFocus={(event) => event.currentTarget.select()}
+                onBlur={() => {
+                  commitArea();
+                  setEditingArea(false);
+                }}
                 onKeyDown={(event) => {
-                  if (event.key === "Enter") setEditingArea(false);
+                  if (event.key === "Enter") {
+                    commitArea();
+                    setEditingArea(false);
+                  }
+                  if (event.key === "Escape") {
+                    setAreaDraft(null);
+                    setEditingArea(false);
+                  }
                 }}
                 onChange={(event) => {
-                  const next = Number(event.target.value);
-                  if (Number.isFinite(next)) {
-                    update({
-                      area: Math.min(objectType.area.max, Math.max(objectType.area.min, next)),
-                    });
+                  // Оставляем только цифры: буквы и знаки в площади не нужны
+                  const digits = event.target.value.replace(/\D/g, "").slice(0, 4);
+                  setAreaDraft(digits);
+                  const next = Number(digits);
+                  // Пересчитываем на лету, но только когда число уже осмысленное
+                  if (digits && next >= objectType.area.min && next <= objectType.area.max) {
+                    update({ area: next });
                   }
                 }}
               />
@@ -228,7 +261,10 @@ export function Calculator({ embedded = false, initialObjectType = null }: Props
               <button
                 type="button"
                 className="area-control__value"
-                onClick={() => setEditingArea(true)}
+                onClick={() => {
+                  setAreaDraft(String(area));
+                  setEditingArea(true);
+                }}
                 aria-label="Изменить площадь вручную"
               >
                 {area}
