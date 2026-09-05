@@ -106,7 +106,22 @@ export function Projects() {
                     <dt className="label">Работы</dt>
                     <dd className={project.works ? "" : "project__empty"}>{project.works ?? "—"}</dd>
                   </div>
+                  <div>
+                    <dt className="label">Срок</dt>
+                    <dd className={project.duration ? "" : "project__empty"}>{project.duration ?? "—"}</dd>
+                  </div>
                 </dl>
+
+                {project.highlights?.length ? (
+                  <ul className="project__highlights">
+                    {project.highlights.map((item) => (
+                      <li key={item}>
+                        <span aria-hidden="true" />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
               </div>
             </li>
           ))}

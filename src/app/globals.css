@@ -1208,3 +1208,20 @@ button, input, textarea, select { font: inherit; color: inherit; }
 @media (max-width: 1439px) {
   .header-contacts__phone span { display: none; }
 }
+
+/* Детали проекта под характеристиками */
+.project__highlights { list-style: none; margin: 26px 0 0; padding: 0; display: grid; gap: 10px; }
+.project__highlights li {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.project__highlights li > span { width: 5px; height: 5px; background: var(--accent); flex: none; }
+/* У зеркального проекта список тоже зеркалится, иначе он спорит с текстом */
+.project--flip .project__highlights li { flex-direction: row-reverse; text-align: right; }
+@media (max-width: 900px) {
+  .project--flip .project__highlights li { flex-direction: row; text-align: left; }
+}
