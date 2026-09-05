@@ -1,0 +1,67 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+      - claude/gpt-analysis-comments-7cspd5
+  workflow_dispatch:
+
+# Разрешения, которых требует официальный деплой Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Параллельные деплои запрещены: в очереди остаётся последний коммит,
+# уже идущий прогон не отменяется, чтобы не публиковать полусобранный сайт.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Проверка типов и линт
+        run: |
+          npx tsc --noEmit
+          npm run lint
+
+      - name: Сборка статики
+        env:
+          # Сайт живёт в подпапке репозитория: /zona-remonta
+          NEXT_PUBLIC_BASE_PATH: /zona-remonta
+          NEXT_PUBLIC_YM_ID: ${{ vars.NEXT_PUBLIC_YM_ID }}
+          NEXT_PUBLIC_GA_ID: ${{ vars.NEXT_PUBLIC_GA_ID }}
+          NEXT_PUBLIC_LEAD_WEBHOOK_URL: ${{ vars.NEXT_PUBLIC_LEAD_WEBHOOK_URL }}
+        run: npm run build
+
+      - name: Отключить обработку Jekyll
+        # Без этого файла GitHub Pages игнорирует каталог _next со всеми ассетами
+        run: touch out/.nojekyll
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: out
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

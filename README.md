@@ -1,36 +1,117 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Зона Ремонта
 
-## Getting Started
+Одностраничный сайт строительной компании. Next.js 16 + TypeScript strict, статический
+экспорт, раздача с GitHub Pages, автодеплой по push.
 
-First, run the development server:
+**Прод:** https://dkaratsapov-web.github.io/zona-remonta/
+
+---
+
+## Запуск
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev          # http://localhost:3000
+npm run build        # статика в ./out
+npm run lint         # eslint
+npx tsc --noEmit     # проверка типов
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Локально `NEXT_PUBLIC_BASE_PATH` пуст, поэтому сайт живёт в корне. На Pages он
+собирается с `/zona-remonta` — это делает workflow, руками менять ничего не нужно.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Переменные окружения
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Список — в `.env.example`. Всё, что начинается с `NEXT_PUBLIC_`, **попадает в
+клиентский бандл**: секретов там быть не может. Для боевых значений в GitHub
+используются Repository variables (Settings → Secrets and variables → Actions → Variables).
 
-## Learn More
+## Где что менять
 
-To learn more about Next.js, take a look at the following resources:
+| Что | Файл |
+|---|---|
+| Телефон, почта, мессенджеры, реквизиты | `src/data/siteConfig.ts` |
+| Регион работы | `src/data/siteConfig.ts` → `serviceArea` |
+| Канал приёма заявок | `src/data/siteConfig.ts` → `leadProvider` |
+| Список услуг | `src/data/services.ts` |
+| Проекты | `src/data/projects.ts` |
+| Калькулятор: шаги, состав работ, коэффициенты | `src/data/calculatorConfig.ts` |
+| Тексты этапов, преимуществ, FAQ | `src/data/content.ts` |
+| Цвета, типографика, отступы | `src/app/globals.css` (блок design tokens) |
+| Фотографии | `src/components/ui/Photo.tsx` + `CONTENT-REPLACEMENT.md` |
+| Метрика и GA | env-переменные, подключение — `src/components/layout/Analytics.tsx` |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Контент нигде не зашит в компоненты: правки идут в `src/data/*`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Приём заявок
 
-## Deploy on Vercel
+Сайт статический — серверного `/api/lead` нет. Отправка идёт из браузера через
+провайдер в `siteConfig.leadProvider`:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **`mock`** (сейчас) — заявка валидируется, полностью формируется и логируется
+  в консоль, но никуда не уходит. Единственный безопасный режим для демо.
+- **`webhook`** — POST на `NEXT_PUBLIC_LEAD_WEBHOOK_URL` прямо из браузера.
+  URL виден в бандле, поэтому эндпоинт должен сам проверять входящее.
+- **`telegram`** — **только через собственный прокси.** Токен бота в клиентском
+  коде недопустим; прямой вызов Bot API намеренно возвращает ошибку конфигурации.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Полезная нагрузка заявки включает ответы калькулятора и источник перехода:
+UTM-метки (отдельно first-touch и last-touch), `yclid`/`gclid`, реферер, id сессии.
+
+### Антиспам
+
+На статике доступен только клиентский уровень: скрытое поле-ловушка и проверка,
+что форму не заполнили быстрее двух секунд. Это отсекает простых ботов, но **не
+заменяет серверную защиту**. Перед боевым запуском канал доставки нужно закрыть
+собственным прокси с rate-limit и валидацией на стороне сервера.
+
+## Анимации
+
+GSAP + ScrollTrigger. Правила:
+
+- Инициализация только через `src/lib/animations.ts` — `initGsap()`.
+- Каждая секция создаёт `gsap.context` и уничтожает его в cleanup эффекта.
+- Desktop и mobile разведены через `gsap.matchMedia()`: пин-сцены не пытаются
+  работать на телефоне, там нативный свайп.
+- `ScrollTrigger.refresh()` вызывается только при смене **ширины** окна: на iOS
+  высота меняется при каждом сворачивании адресной строки.
+- При `prefers-reduced-motion: reduce` анимации не запускаются вовсе.
+
+**Как отключить анимации целиком:** убрать вызовы `initGsap()` в секциях либо
+задать `prefers-reduced-motion` в системе — контент останется полностью доступным.
+
+Начальные состояния (`opacity: 0`) висят под классом `.js`, который ставится
+инлайн-скриптом в `<head>`. Если JS не загрузился, страница читается целиком.
+
+## Деплой
+
+`.github/workflows/deploy.yml`: push в `main` или рабочую ветку → проверка типов
+и линт → сборка → публикация на Pages. Ручной запуск — через workflow_dispatch.
+
+Требуется один раз включить в репозитории: **Settings → Pages → Source: GitHub Actions**.
+
+## QA
+
+```bash
+npm i -D playwright
+node scripts/qa-screenshots.mjs   # скриншоты секций + проверка горизонтального переполнения
+```
+
+Перед публикацией обязательна проверка на живом iPhone: связка `100svh` +
+закреплённых сцен ломается именно на настоящем Safari, в эмуляторе это не видно.
+
+## Production blockers
+
+Разработке не мешают, публикации — мешают. Всё вынесено в конфиги, замена
+не требует правок вёрстки.
+
+- [ ] Регион работы и города выезда
+- [ ] Телефон, email, Telegram, WhatsApp
+- [ ] Логотип в SVG
+- [ ] Юрлицо и реквизиты
+- [ ] Политика обработки ПД и текст согласия — от юриста заказчика
+- [ ] Реальные фотографии объектов (см. `CONTENT-REPLACEMENT.md`)
+- [ ] Боевой канал приёма заявок за собственным прокси
+- [ ] Прайс или вилки для калькулятора (`pricingEnabled`)
+- [ ] Подтверждение состава работ в `calculatorConfig.ts`
+- [ ] ID Яндекс.Метрики
