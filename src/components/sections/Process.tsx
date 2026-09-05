@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { initGsap } from "@/lib/animations";
+import { initGsap, ScrollTrigger } from "@/lib/animations";
 import { usePrefersReducedMotion } from "@/lib/hooks";
 import { processSteps } from "@/data/content";
 import { Photo } from "@/components/ui/Photo";
@@ -28,27 +28,28 @@ export function Process() {
       const mm = gsap.matchMedia();
 
       mm.add("(min-width: 1024px)", () => {
-        const trigger = gsap.timeline({
-          scrollTrigger: {
-            trigger: node,
-            start: "top top",
-            end: `+=${processSteps.length * 420}`,
-            pin: ".process__stage",
-            scrub: 0.4,
-            onUpdate: (self) => {
-              const index = Math.min(
-                processSteps.length - 1,
-                Math.floor(self.progress * processSteps.length),
-              );
-              setActive(index);
-            },
+        /*
+          Закрепление сделано через CSS position: sticky, а не через pin.
+          Пин вырывает блок из потока и держит его по координатам, снятым
+          один раз: стоило соседней секции изменить высоту — например,
+          конфигуратору раскрыть категории — и закреплённая сцена наезжала
+          на неё. Sticky остаётся частью потока и наехать не может.
+          ScrollTrigger здесь только считает активный шаг.
+        */
+        const trigger = ScrollTrigger.create({
+          trigger: node,
+          start: "top top",
+          end: "bottom bottom",
+          onUpdate: (self) => {
+            const index = Math.min(
+              processSteps.length - 1,
+              Math.floor(self.progress * processSteps.length),
+            );
+            setActive(index);
           },
         });
 
-        return () => {
-          trigger.scrollTrigger?.kill();
-          trigger.kill();
-        };
+        return () => trigger.kill();
       });
     }, node);
 
@@ -64,7 +65,8 @@ export function Process() {
         <SectionLabel number="07" title="Как мы работаем" />
       </div>
 
-      {/* Desktop-сцена */}
+      {/* Desktop-сцена: липкая внутри своей дорожки прокрутки */}
+      <div className="process__scroll">
       <div className="process__stage">
         <div className="container process__grid">
           <div className="process__current">
@@ -94,6 +96,7 @@ export function Process() {
             <Photo variant={PHOTOS[active]} edges />
           </div>
         </div>
+      </div>
       </div>
 
       {/* Mobile-таймлайн */}

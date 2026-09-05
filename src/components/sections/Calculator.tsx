@@ -17,7 +17,6 @@ import { useSessionState, usePrefersReducedMotion } from "@/lib/hooks";
 import { track } from "@/lib/analytics";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import { AnimatedNumber } from "@/components/ui/AnimatedNumber";
-import { HoverPreview } from "@/components/ui/HoverPreview";
 import { LeadForm } from "@/components/ui/LeadForm";
 
 type State = {
@@ -49,7 +48,6 @@ export function Calculator({ embedded = false, initialObjectType = null }: Props
     initialObjectType ? { ...INITIAL, objectType: initialObjectType } : INITIAL,
   );
   const [openCategories, setOpenCategories] = useState<CategoryId[]>(["preparation"]);
-  const [preview, setPreview] = useState<string | null>(null);
   const [delta, setDelta] = useState<{ id: number; value: number } | null>(null);
   const [confirmReset, setConfirmReset] = useState(false);
   const [leadOpen, setLeadOpen] = useState(false);
@@ -329,11 +327,7 @@ export function Calculator({ embedded = false, initialObjectType = null }: Props
                     const price = servicePrice(service, objectType, area, units, breakdown.works);
                     return (
                       <li key={service.id}>
-                        <label
-                          className={`row ${isOn ? "row--on" : ""}`}
-                          onPointerEnter={() => setPreview(service.preview ?? null)}
-                          onPointerLeave={() => setPreview(null)}
-                        >
+                        <label className={`row ${isOn ? "row--on" : ""}`}>
                           <input
                             type="checkbox"
                             className="row__input"
@@ -552,8 +546,6 @@ export function Calculator({ embedded = false, initialObjectType = null }: Props
           </div>
         </div>
       ) : null}
-
-      <HoverPreview src={preview} />
     </div>
   );
 

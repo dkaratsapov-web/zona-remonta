@@ -5,6 +5,7 @@ import { StickyCta } from "@/components/layout/StickyCta";
 import { ScrollProgress } from "@/components/layout/ScrollProgress";
 import { CustomCursor } from "@/components/ui/CustomCursor";
 import { Analytics } from "@/components/layout/Analytics";
+import { ScrollRefresher } from "@/components/layout/ScrollRefresher";
 import { UiProvider } from "@/components/ui/UiContext";
 import { GlobalModals } from "@/components/ui/GlobalModals";
 
@@ -31,6 +32,7 @@ export default function Home() {
       <div id="page">
       <Preloader />
       <Analytics />
+      <ScrollRefresher />
       <CustomCursor />
       <Header />
       <ScrollProgress total={11} />

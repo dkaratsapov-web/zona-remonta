@@ -41,8 +41,6 @@ export type Service = {
   priceType: PricingMode;
   price: number;
   availableFor: ObjectTypeId[];
-  /** Кадр для превью при наведении. */
-  preview?: string;
   /** Услуги, которые часто берут вместе с этой. */
   suggests?: string[];
 };
@@ -57,7 +55,6 @@ export const services: Service[] = [
     priceType: "per_m2",
     price: 950,
     availableFor: ["apartment", "house", "works"],
-    preview: "/images/services/construction.webp",
   },
   {
     id: "waste",
@@ -67,7 +64,6 @@ export const services: Service[] = [
     priceType: "per_m2",
     price: 380,
     availableFor: ["apartment", "house", "works"],
-    preview: "/images/services/construction.webp",
   },
   {
     id: "base",
@@ -77,7 +73,6 @@ export const services: Service[] = [
     priceType: "per_m2",
     price: 1450,
     availableFor: ["apartment", "house", "works"],
-    preview: "/images/services/construction.webp",
   },
   {
     id: "partitions",
@@ -87,7 +82,6 @@ export const services: Service[] = [
     priceType: "per_m2",
     price: 1200,
     availableFor: ["apartment", "house", "works"],
-    preview: "/images/services/construction.webp",
   },
 
   // ── Инженерия ───────────────────────────────────────────────
@@ -99,7 +93,6 @@ export const services: Service[] = [
     priceType: "per_m2",
     price: 1500,
     availableFor: ["apartment", "house", "works"],
-    preview: "/images/services/construction.webp",
   },
   {
     id: "plumbing",
@@ -109,7 +102,6 @@ export const services: Service[] = [
     priceType: "per_m2",
     price: 1250,
     availableFor: ["apartment", "house", "works"],
-    preview: "/images/services/construction.webp",
     suggests: ["waterproofing"],
   },
   {
@@ -120,7 +112,6 @@ export const services: Service[] = [
     priceType: "per_m2",
     price: 1350,
     availableFor: ["house", "works"],
-    preview: "/images/services/construction.webp",
   },
   {
     id: "ventilation",
@@ -129,7 +120,6 @@ export const services: Service[] = [
     priceType: "per_m2",
     price: 1100,
     availableFor: ["apartment", "house"],
-    preview: "/images/services/construction.webp",
   },
 
   // ── Отделка ─────────────────────────────────────────────────
@@ -141,7 +131,6 @@ export const services: Service[] = [
     priceType: "per_m2",
     price: 1850,
     availableFor: ["apartment", "house", "works"],
-    preview: "/images/services/apartment.webp",
   },
   {
     id: "ceiling",
@@ -151,7 +140,6 @@ export const services: Service[] = [
     priceType: "per_m2",
     price: 1200,
     availableFor: ["apartment", "house", "works"],
-    preview: "/images/services/apartment.webp",
   },
   {
     id: "floors",
@@ -161,7 +149,6 @@ export const services: Service[] = [
     priceType: "per_m2",
     price: 1400,
     availableFor: ["apartment", "house", "works"],
-    preview: "/images/services/apartment.webp",
   },
   {
     id: "tiles",
@@ -171,7 +158,6 @@ export const services: Service[] = [
     priceType: "per_m2",
     price: 1650,
     availableFor: ["apartment", "house", "works"],
-    preview: "/images/services/apartment.webp",
     suggests: ["waterproofing", "base"],
   },
   {
@@ -182,7 +168,6 @@ export const services: Service[] = [
     priceType: "per_m2",
     price: 620,
     availableFor: ["apartment", "house", "works"],
-    preview: "/images/services/construction.webp",
   },
 
   // ── Комплектация ────────────────────────────────────────────
@@ -194,7 +179,6 @@ export const services: Service[] = [
     priceType: "fixed",
     price: 36000,
     availableFor: ["apartment", "house", "works"],
-    preview: "/images/services/other.webp",
   },
   {
     id: "windows",
@@ -204,7 +188,6 @@ export const services: Service[] = [
     priceType: "per_unit",
     price: 12500,
     availableFor: ["apartment", "house", "works", "windows"],
-    preview: "/images/services/windows.webp",
   },
   {
     id: "delivery",
@@ -213,7 +196,6 @@ export const services: Service[] = [
     priceType: "fixed",
     price: 28000,
     availableFor: ["apartment", "house", "works", "windows"],
-    preview: "/images/services/materials.webp",
   },
   {
     id: "materials",
@@ -223,7 +205,6 @@ export const services: Service[] = [
     priceType: "percentage",
     price: 12,
     availableFor: ["apartment", "house", "works", "windows"],
-    preview: "/images/services/materials.webp",
   },
 ];
 
