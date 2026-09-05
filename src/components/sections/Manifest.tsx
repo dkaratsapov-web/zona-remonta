@@ -5,13 +5,28 @@ import { initGsap } from "@/lib/animations";
 import { usePrefersReducedMotion } from "@/lib/hooks";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 
-const HEADLINE = [
-  { text: "Ремонт — это не набор", accent: false },
-  { text: "отдельных работ. Это ", accent: false },
-  { text: "один процесс", accent: true },
-  { text: ", за который должен", accent: false },
-  { text: "отвечать один подрядчик.", accent: false },
-];
+/**
+ * Фраза разбита ПОСЛОВНО, а не по строкам: куски склеиваются в поток,
+ * поэтому каждое слово выводится вместе со своим пробелом. Разбивка по
+ * строкам съедала пробелы на стыках («наборотдельных»).
+ */
+const ACCENT = ["один", "процесс"];
+const HEADLINE = "Ремонт — это не набор отдельных работ. Это один процесс, за который должен отвечать один подрядчик."
+  .split(" ")
+  .map((word) => ({
+    word,
+    // «один процесс» подсвечиваем красным, но только первое вхождение слова «один»
+    accent: false as boolean,
+  }));
+
+// помечаем ровно словосочетание «один процесс», а не каждое слово «один»
+for (let i = 0; i < HEADLINE.length - 1; i += 1) {
+  if (HEADLINE[i].word === ACCENT[0] && HEADLINE[i + 1].word.startsWith(ACCENT[1])) {
+    HEADLINE[i].accent = true;
+    HEADLINE[i + 1].accent = true;
+    break;
+  }
+}
 
 /**
  * Текст не «выезжает» абзацем: по мере прокрутки слова перекрашиваются
@@ -64,7 +79,8 @@ export function Manifest() {
               data-word=""
               style={{ color: chunk.accent ? "var(--accent-text)" : "#3A3A3A" }}
             >
-              {chunk.text}
+              {chunk.word}
+              {index < HEADLINE.length - 1 ? " " : ""}
             </span>
           ))}
         </p>

@@ -954,3 +954,28 @@ button, input, textarea, select { font: inherit; color: inherit; }
 
 /* Метка demo упиралась в край экрана на широких мониторах */
 .hero .demo-tag { right: var(--pad); }
+
+/* Кадр с настоящим фото: сам снимок заполняет контейнер целиком */
+.photo--image { background: #0c0c0c; }
+.photo--image img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* На градиентных заглушках подложки хватало, на реальных снимках — нет:
+   светлая терраса и окна съедали заголовок. Затемнение усилено снизу,
+   описание стало светлее. Контраст проверен на самом ярком кадре. */
+.service-card__scrim {
+  background: linear-gradient(
+    180deg,
+    rgba(8, 8, 8, 0.25) 0%,
+    rgba(8, 8, 8, 0.55) 42%,
+    rgba(8, 8, 8, 0.92) 72%,
+    rgba(8, 8, 8, 0.97) 100%
+  );
+}
+.service-card:hover .service-card__scrim { opacity: 0.9; }
+.service-card__text { color: #c8c8c8; }

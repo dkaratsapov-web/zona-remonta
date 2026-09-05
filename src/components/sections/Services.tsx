@@ -97,7 +97,12 @@ export function Services() {
           {services.map((service) => (
             <li className="service-card" key={service.id} data-cursor="project">
               <div className="service-card__media">
-                <Photo variant={service.photo} edges />
+                <Photo
+                  variant={service.photo}
+                  src={service.image}
+                  alt={service.imageAlt}
+                  edges
+                />
               </div>
               <span className="service-card__scrim" aria-hidden="true" />
               <span className="service-card__num">{service.number}</span>

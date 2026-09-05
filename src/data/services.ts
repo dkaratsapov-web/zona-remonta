@@ -7,7 +7,11 @@ export type Service = {
   /** Заголовок с ручным переносом строки — типографика важнее автопереноса. */
   titleLines: string[];
   description: string;
+  /** Заглушка на градиентах — используется, пока нет реального кадра. */
   photo: PhotoVariant;
+  /** Реальное фото из public. Задано — рисуется вместо заглушки. */
+  image?: string;
+  imageAlt?: string;
 };
 
 export const services: Service[] = [
@@ -18,6 +22,8 @@ export const services: Service[] = [
     titleLines: ["КВАРТИРЫ", "ПОД КЛЮЧ"],
     description: "Обычный, дизайнерский и премиальный ремонт квартир.",
     photo: "warm",
+    image: "/images/services/apartment.webp",
+    imageAlt: "Гостиная современной квартиры после ремонта: панорамное остекление, тёмная отделка, кухня-столовая",
   },
   {
     id: "houses",
@@ -26,6 +32,8 @@ export const services: Service[] = [
     titleLines: ["ДОМА", "ПОД КЛЮЧ"],
     description: "Коттеджи, частные дома, террасы и загородные объекты.",
     photo: "night",
+    image: "/images/services/house.webp",
+    imageAlt: "Современный загородный дом вечером: панорамное остекление, терраса с зоной отдыха, подсветка ступеней",
   },
   {
     id: "construction",
