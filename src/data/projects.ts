@@ -45,6 +45,8 @@ export const projects: Project[] = [
     area: null,
     works: null,
     photo: "cool",
+    image: "/images/projects/project-02.webp",
+    imageAlt: "Загородный дом вечером: панорамное остекление, терраса, освещённый участок, вид на озеро",
     isDemo: true,
   },
   {
