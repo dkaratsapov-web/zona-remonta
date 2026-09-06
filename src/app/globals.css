@@ -400,6 +400,9 @@ button, input, textarea, select { font: inherit; color: inherit; }
   transition: opacity 0.6s ease, visibility 0.6s ease;
 }
 .preloader--done { opacity: 0; visibility: hidden; }
+/* Заставку убирает скрипт. Если скриптов нет, она осталась бы на экране
+   и закрыла бы весь сайт — поэтому без класса .js её просто нет. */
+html:not(.js) .preloader { display: none; }
 .preloader__line {
   position: absolute;
   left: 0;
@@ -1747,18 +1750,64 @@ button, input, textarea, select { font: inherit; color: inherit; }
   .mobile-menu__cta { margin-top: 12px; width: 100%; min-height: 52px; }
 }
 
-/* ═══════════  ЛАЗЕРНАЯ РАЗМЕТКА ЗАГОЛОВКА (ТЕЛЕФОН)  ═══════════ */
+/* ═══════════  ГРАВИРОВКА ЗАГОЛОВКА (ТЕЛЕФОН)  ═══════════ */
 /*
-  Красная линия проходит по надписи, следом по буквам идёт блик —
-  как луч строительного лазера по стене. Всё на CSS: анимируются
-  transform и background-position, поэтому кадр не пересобирается
-  и на слабом телефоне эффект не «дёргает» прокрутку.
+  Буквы врезаны в стену: видна только фаска, самих букв нет. Сверху вниз
+  идёт луч, и за ним надпись наливается светом — как гравировка по камню.
+
+  Заливка сделана двумя слоями фона, обрезанными по буквам
+  (background-clip: text), а не вторым экземпляром текста: копия слова
+  попала бы в h1 и её прочитали бы и поисковик, и скринридер.
+    · нижний слой — вертикальная «врезка»: белое над границей,
+      почти прозрачное под ней; граница едет вниз;
+    · верхний слой — блик, который потом раз в 8 секунд проходит по
+      готовой надписи.
+  Анимируется только background-position, так что перерисовывается
+  один элемент и прокрутка не страдает.
+
+  Исходное «невырезанное» состояние висит на классе .js: без скриптов
+  анимация не запустится, и заголовок должен остаться видимым.
 */
 @media (max-width: 767px) {
   .hero__title { position: relative; }
-  /* Слой во всю высоту заголовка, сама линия нарисована фоном по его
-     верхней кромке. Так translateY считается от высоты надписи, а не
-     от двух пикселей линии, и луч проходит её целиком. */
+
+  /* Фаска: светлая кромка снизу по контуру букв. Тень рисуется по форме
+     глифа и видна даже там, где заливка ещё прозрачная. */
+  .hero__title [data-hero-line] { text-shadow: 0 1px 0 rgba(255, 255, 255, 0.16); }
+
+  @supports ((-webkit-background-clip: text) or (background-clip: text)) {
+    .hero__title [data-hero-line] {
+      background-image:
+        linear-gradient(100deg, transparent 0 40%, rgba(255, 255, 255, 0.9) 47%, transparent 54% 100%),
+        linear-gradient(180deg, #ededed 0 49.2%, #ffffff 49.6% 50.4%, rgba(255, 255, 255, 0.08) 50.8% 100%);
+      background-size: 280% 100%, 100% 200%;
+      background-repeat: no-repeat;
+      background-position: 140% 0, 0 0;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    /* до прохода луча — только врезка */
+    .js .hero__title [data-hero-line] { background-position: 140% 0, 0 100%; }
+    .js .hero__title .hero__mask:nth-of-type(1) [data-hero-line] {
+      animation: hero-engrave 0.6s linear 1.15s forwards, hero-sheen 8s linear 9.15s infinite;
+    }
+    .js .hero__title .hero__mask:nth-of-type(2) [data-hero-line] {
+      animation: hero-engrave 0.6s linear 1.75s forwards, hero-sheen 8s linear 9.15s infinite;
+    }
+    @keyframes hero-engrave {
+      to { background-position: 140% 0, 0 0; }
+    }
+    /* блик идёт по уже готовой надписи, врезка держится открытой */
+    @keyframes hero-sheen {
+      0%, 4% { background-position: 140% 0, 0 0; }
+      26%, 100% { background-position: -40% 0, 0 0; }
+    }
+  }
+
+  /* Луч. Слой во всю высоту заголовка, сама линия нарисована фоном по его
+     верхней кромке: иначе translateY(100%) считался бы от двух пикселей
+     линии, и луч стоял бы на месте. */
   .hero__scan {
     position: absolute;
     left: -8%;
@@ -1771,43 +1820,26 @@ button, input, textarea, select { font: inherit; color: inherit; }
     filter: drop-shadow(0 0 12px rgba(230, 30, 40, 0.5));
     opacity: 0;
     pointer-events: none;
-    animation: hero-scan 8s cubic-bezier(0.45, 0, 0.25, 1) 1.15s infinite;
+    animation: hero-scan 8s linear 1.15s infinite;
   }
   @keyframes hero-scan {
-    0% { transform: translateY(-8%); opacity: 0; }
-    3% { opacity: 1; }
-    24% { transform: translateY(102%); opacity: 1; }
-    30% { transform: translateY(110%); opacity: 0; }
-    100% { transform: translateY(110%); opacity: 0; }
-  }
-
-  /* Блик по буквам. Подложка чуть темнее чистого белого — иначе
-     светлую волну на белом не видно. */
-  @supports ((-webkit-background-clip: text) or (background-clip: text)) {
-    .hero__title [data-hero-line] {
-      background-image: linear-gradient(
-        100deg,
-        #ededed 0 40%,
-        #ffffff 47%,
-        rgba(255, 255, 255, 0.72) 50%,
-        #ffffff 53%,
-        #ededed 60% 100%
-      );
-      background-size: 280% 100%;
-      background-position: 140% 0;
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      animation: hero-sheen 8s cubic-bezier(0.5, 0, 0.2, 1) 1.15s infinite;
-    }
-    @keyframes hero-sheen {
-      0%, 4% { background-position: 140% 0; }
-      30%, 100% { background-position: -40% 0; }
-    }
+    0% { transform: translateY(0); opacity: 0; }
+    1% { opacity: 1; }
+    15% { transform: translateY(100%); opacity: 1; }
+    19% { transform: translateY(106%); opacity: 0; }
+    100% { transform: translateY(106%); opacity: 0; }
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .hero__scan { display: none; }
-  .hero__title [data-hero-line] { animation: none; color: var(--text); }
+  /* Без анимации заливка осталась бы на «невырезанном» кадре, то есть
+     заголовка не было бы видно вовсе. */
+  .hero__title [data-hero-line],
+  .js .hero__title [data-hero-line] {
+    animation: none;
+    background-image: none;
+    color: var(--text);
+    text-shadow: none;
+  }
 }

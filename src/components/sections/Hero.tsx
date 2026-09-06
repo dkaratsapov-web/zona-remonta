@@ -22,17 +22,44 @@ export function Hero() {
     if (!node || reduced) return;
 
     const gsap = initGsap();
+    const mm = gsap.matchMedia();
     const ctx = gsap.context(() => {
-      // Вход: кадр «выдыхает» из 1.08 в 1, заголовок раскрывается маской
-      const tl = gsap.timeline({ delay: 0.15 });
-      tl.fromTo(photo.current, { scale: 1.08 }, { scale: 1, duration: 1.8, ease: "power2.out" }, 0)
-        .fromTo(
-          "[data-hero-line]",
-          { yPercent: 110 },
-          { yPercent: 0, duration: 1, ease: "power3.out", stagger: 0.08 },
-          0.15,
-        )
-        .fromTo("[data-hero-fade]", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8, stagger: 0.08 }, 0.5);
+      /*
+        Вход отличается по ширине экрана.
+
+        Десктоп: кадр «выдыхает» из 1.08 в 1, слова выезжают из-под маски.
+
+        Телефон: заголовок гравируется — луч проходит по надписи, и за ним
+        буквы наливаются светом. Это делает CSS, поэтому сдвиг строк здесь
+        отключён: два движения на одних и тех же буквах читались бы как
+        сбой. Подписи под заголовком появляются после прохода луча.
+      */
+      mm.add(
+        { desktop: "(min-width: 768px)", phone: "(max-width: 767px)" },
+        (context) => {
+          const { desktop } = context.conditions as { desktop: boolean; phone: boolean };
+          const tl = gsap.timeline({ delay: 0.15 });
+          tl.fromTo(photo.current, { scale: 1.08 }, { scale: 1, duration: 1.8, ease: "power2.out" }, 0);
+
+          if (desktop) {
+            tl.fromTo(
+              "[data-hero-line]",
+              { yPercent: 110 },
+              { yPercent: 0, duration: 1, ease: "power3.out", stagger: 0.08 },
+              0.15,
+            ).fromTo("[data-hero-fade]", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8, stagger: 0.08 }, 0.5);
+          } else {
+            // Надстрочник появляется сразу — он «подписывает» стену до
+            // того, как по ней пройдёт луч. Остальное — после гравировки.
+            tl.fromTo(".eyebrow", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.6 }, 0.3).fromTo(
+              ".hero__lead, .hero__sub, .hero__actions",
+              { opacity: 0, y: 16 },
+              { opacity: 1, y: 0, duration: 0.7, stagger: 0.1 },
+              2,
+            );
+          }
+        },
+      );
 
       // Уход: кадр темнеет и слегка увеличивается, слова расходятся
       gsap.to(photo.current, {
@@ -60,7 +87,10 @@ export function Hero() {
       });
     }, node);
 
-    return () => ctx.revert();
+    return () => {
+      mm.revert();
+      ctx.revert();
+    };
   }, [reduced]);
 
   // Микро-параллакс от курсора — только точный указатель
