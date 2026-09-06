@@ -7,7 +7,7 @@ export const assetManifest: Record<string, string> = {
   "/icon-32.png": "e0321904",
   "/icon-512.png": "7229434c",
   "/images/before-after/after.webp": "18dbc792",
-  "/images/before-after/before.webp": "06cb3a19",
+  "/images/before-after/before.webp": "009c044b",
   "/images/projects/project-01.webp": "86c3d1c8",
   "/images/projects/project-02.webp": "b51fcef8",
   "/images/projects/project-03.webp": "1e31f65d",
