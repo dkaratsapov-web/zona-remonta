@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Phone, Send, MessageCircle } from "lucide-react";
-import { siteConfig, hasPhone, hasMessengers } from "@/data/siteConfig";
+import { siteConfig, hasPhone } from "@/data/siteConfig";
 import { track } from "@/lib/analytics";
 import { useUi, LEAD_TOPICS } from "@/components/ui/UiContext";
 import { Logo } from "./Logo";
@@ -39,6 +39,34 @@ function MessengerButton({
       onClick={onFallback}
     >
       {icon}
+    </button>
+  );
+}
+
+/** Кнопка мессенджера в мобильном меню: ссылка, если аккаунт задан, иначе заявка. */
+function MobileMenuMessenger({
+  label,
+  href,
+  onFallback,
+  icon,
+}: {
+  label: string;
+  href: string;
+  onFallback: () => void;
+  icon: React.ReactNode;
+}) {
+  if (href) {
+    return (
+      <a href={href} className="btn btn--ghost mobile-menu__im" onClick={() => track("messenger_click", { kind: label.toLowerCase() })}>
+        {icon}
+        {label}
+      </a>
+    );
+  }
+  return (
+    <button type="button" className="btn btn--ghost mobile-menu__im" aria-haspopup="dialog" onClick={onFallback}>
+      {icon}
+      {label}
     </button>
   );
 }
@@ -143,7 +171,7 @@ export function Header() {
 
       <div id="mobile-menu" className={`mobile-menu ${menuOpen ? "mobile-menu--open" : ""}`} hidden={!menuOpen}>
         <div className="mobile-menu__head">
-          <Logo size={15} />
+          <Logo />
           <button type="button" className="mobile-menu__close" aria-label="Закрыть меню" onClick={() => setMenuOpen(false)}>
             ✕
           </button>
@@ -178,20 +206,45 @@ export function Header() {
               {siteConfig.contacts.phoneDisplay}
             </span>
           )}
-          {hasMessengers ? (
-            <div className="mobile-menu__messengers">
-              {siteConfig.contacts.telegram ? (
-                <a href={siteConfig.contacts.telegram} className="btn btn--ghost" onClick={() => track("messenger_click", { kind: "telegram" })}>
-                  Telegram
-                </a>
-              ) : null}
-              {siteConfig.contacts.whatsapp ? (
-                <a href={siteConfig.contacts.whatsapp} className="btn btn--ghost" onClick={() => track("messenger_click", { kind: "whatsapp" })}>
-                  WhatsApp
-                </a>
-              ) : null}
-            </div>
-          ) : null}
+          {/*
+            Мессенджеры дублируют десктопную шапку: пока аккаунтов нет,
+            кнопка открывает заявку, а не ведёт в никуда. Раньше блок
+            был завязан на заполненные ссылки и на телефоне пропадал
+            целиком — связаться из меню было нечем, кроме звонка.
+          */}
+          <div className="mobile-menu__messengers">
+            <MobileMenuMessenger
+              label="Telegram"
+              href={siteConfig.contacts.telegram}
+              onFallback={() => {
+                setMenuOpen(false);
+                openLead(LEAD_TOPICS.messenger("Telegram"));
+              }}
+              icon={<Send size={16} aria-hidden="true" />}
+            />
+            <MobileMenuMessenger
+              label="MAX"
+              href={siteConfig.contacts.max}
+              onFallback={() => {
+                setMenuOpen(false);
+                openLead(LEAD_TOPICS.messenger("MAX"));
+              }}
+              icon={<MessageCircle size={16} aria-hidden="true" />}
+            />
+          </div>
+
+          <button
+            type="button"
+            className="btn btn--primary mobile-menu__cta"
+            aria-haspopup="dialog"
+            onClick={() => {
+              setMenuOpen(false);
+              track("final_cta_click", { place: "mobile_menu" });
+              openLead(LEAD_TOPICS.discuss);
+            }}
+          >
+            Обсудить проект
+          </button>
         </div>
       </div>
     </>

@@ -1686,3 +1686,53 @@ button, input, textarea, select { font: inherit; color: inherit; }
 .area-control__input { -moz-appearance: textfield; appearance: textfield; }
 .area-control__input::-webkit-outer-spin-button,
 .area-control__input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+/* ═══════════  ПРАВКИ ПОД ТЕЛЕФОН  ═══════════ */
+@media (max-width: 767px) {
+  /*
+    Первый экран. .hero — flex-строка; полоса фактов держалась в ней
+    как absolute и в поток не попадала. На телефоне она становится
+    relative — и вставала СБОКУ от контента, уезжая за правый край
+    (overflow: hidden прятал это от полосы прокрутки, но цифры
+    обрезались). Разворачиваем контейнер в колонку.
+  */
+  .hero { flex-direction: column; align-items: stretch; }
+  .hero__inner { flex: 0 0 auto; }
+  .hero__facts { flex: 0 0 auto; }
+
+  /*
+    Тач-цели. Меньше 44 px по короткой стороне попасть пальцем трудно
+    (WCAG 2.2 «Target Size», рекомендация Apple HIG). Отрицательные
+    поля добавляют зону нажатия, не двигая вёрстку.
+  */
+  .burger { min-width: 44px; min-height: 44px; padding: 12px 0 12px 14px; justify-content: center; }
+  .mobile-menu__close { min-width: 44px; min-height: 44px; font-size: 24px; display: inline-flex; align-items: center; justify-content: center; }
+  .mobile-menu__phone { padding-block: 8px; }
+  .cat__all { padding: 12px 0 12px 14px; margin: -12px 0; }
+  .consent { gap: 14px; }
+  .consent input { width: 22px; height: 22px; margin-top: 0; }
+  .consent span { font-size: 13px; }
+  .area-control__range { height: 44px; }
+  .link-underline { padding-block: 8px; }
+  .header-contacts__phone,
+  .faq__phone { min-height: 44px; display: inline-flex; align-items: center; }
+  .site-header__inner > a { min-height: 44px; display: inline-flex; align-items: center; }
+  .area-control__value { min-height: 44px; }
+  .site-footer__list a { display: inline-block; padding-block: 10px; }
+
+  /* Микроподписи: 9 px на телефоне не читаются */
+  .hero .eyebrow .label { font-size: 10px; }
+  .total__demo { font-size: 10px; }
+  .demo-tag { font-size: 10px; }
+
+  /* Меню: мессенджеры и главная кнопка на всю ширину.
+     Содержимое переросло экран — на 667 px «Обсудить проект» обрезалась,
+     поэтому панель прокручивается, а отступ до пунктов сжимается. */
+  .mobile-menu { overflow-y: auto; overscroll-behavior: contain; }
+  .mobile-menu__nav { margin-top: clamp(20px, 5vh, 60px); }
+  .mobile-menu__link { padding: clamp(12px, 2.2vh, 18px) 0; font-size: clamp(26px, 8vw, 38px); }
+  .mobile-menu__foot { padding-top: 18px; }
+  .mobile-menu__messengers { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .mobile-menu__im { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; padding: 0 12px; font-size: 13px; }
+  .mobile-menu__cta { margin-top: 12px; width: 100%; min-height: 52px; }
+}
