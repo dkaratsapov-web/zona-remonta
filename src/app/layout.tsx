@@ -1,11 +1,12 @@
 import type { Metadata, Viewport } from "next";
 import { Manrope } from "next/font/google";
+import { asset } from "@/lib/asset";
 import { siteConfig } from "@/data/siteConfig";
 import "./globals.css";
 
-// Пути в metadata не получают basePath автоматически — подставляем вручную,
-// иначе на GitHub Pages фавикон запрашивается из корня домена.
-const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+// Пути в metadata не получают basePath автоматически — asset() подставляет
+// и его, и версию файла: иначе на GitHub Pages фавикон запрашивается
+// из корня домена, а обновлённый — берётся из кэша.
 
 const manrope = Manrope({
   subsets: ["latin", "cyrillic"],
@@ -28,10 +29,10 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
   icons: {
     icon: [
-      { url: `${basePath}/favicon.svg`, type: "image/svg+xml" },
-      { url: `${basePath}/icon-32.png`, sizes: "32x32", type: "image/png" },
+      { url: asset("/favicon.svg"), type: "image/svg+xml" },
+      { url: asset("/icon-32.png"), sizes: "32x32", type: "image/png" },
     ],
-    apple: `${basePath}/apple-touch-icon.png`,
+    apple: asset("/apple-touch-icon.png"),
   },
 };
 
