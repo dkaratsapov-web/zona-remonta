@@ -101,6 +101,13 @@ export function Hero() {
           <span className="hero__mask" data-hero-word="remonta">
             <span data-hero-line>РЕМОНТА</span>
           </span>
+          {/*
+            Луч строительного лазера: линия проходит по надписи и
+            «размечает» её. Чистый CSS — на телефоне это дешевле
+            анимации на JS и не мешает входной анимации GSAP,
+            та работает с transform, а блик — с background-position.
+          */}
+          <span className="hero__scan" aria-hidden="true" />
         </h1>
 
         <p className="hero__lead" data-hero-fade>
